@@ -1,6 +1,8 @@
+  HTMLresult = document.getElementById('result');
   HTMLtarget = document.getElementById('target');
   HTMLscore = document.getElementById('score');
   HTMLtime = document.getElementById('time');
+  HTMLdifficulty = document.getElementById('diff');
 
   score = 0;
   fault = 0;
@@ -11,16 +13,40 @@
 
   // To define that blocks count needs to increase every 2 times (after 3 times in the beginning)
   blocksIncrease = 2;
-  timer = 750;
+  timer = 1000;
+
+  // Time for countdown
+  let newTime = 15;
   
+  multipliColorBy = 0.25;  // Difficulty
+
+/**
+ * 0.10 - easy
+ * 0.065 - medium
+ * 0.04 - hard
+ */
+
+  function difficulty(){
+    if(multipliColorBy == 0.04)
+      return 'Hardcore';
+
+    if(multipliColorBy == 0.065)
+      return 'Medium';
+
+    if(multipliColorBy == 0.10)
+      return 'Eazzy';
+
+    else
+      return 'Not defined';
+}
+
   // Generate a new shade
   function newShade(){
 
-    multipliColorBy = 2;  // Difficulty
+    let a = Math.floor(Math.random() * 100);  // between 0 - 100
 
-    let a = Math.floor(Math.random() * 100);
     shades = [];
-
+    let trans = 0.5;
     let x = 0;
 
     while(x < 2){
@@ -29,22 +55,20 @@
       let g = Math.floor((255 * (100 - a)) / 100);
       let b = Math.floor((255 * a) / 100);
 
-      a = a + multipliColorBy;
-
-      let finalRGB = `rgb(${r}, ${g}, ${b})`;
-
+      let finalRGB = `rgb(${r}, ${g}, ${b}, ${trans})`;
+      
       shades.push(finalRGB);
+
+      trans = trans + multipliColorBy;
 
       x++;
 
     }
-
+    
   }
 
   // Time function
   function countDown(){
-
-    let newTime = 15;
 
     HTMLtime.innerHTML = newTime;
 
@@ -52,15 +76,13 @@
 
       newTime--;
 
-      HTMLtime.innerHTML = newTime;
+      HTMLtime.innerHTML = `<span class="timeLeft">${newTime}</span>`;
 
-      if(newTime < 0){
+      if(newTime < 1){
 
         clearInterval(newInt);
 
-        HTMLtarget.style.display = 'none';
-
-        HTMLtime.innerHTML = 'FINISH!';
+        HTMLresult.innerHTML = `<h1 style="color: red;">GAME OVER!</h1>`;
 
       }
 
@@ -74,7 +96,7 @@
 
       clearInterval(newInt);
 
-      if(score == 20){
+      if(score == 18){
 
         console.log('You are a hawk!');
 
@@ -88,9 +110,19 @@
 
     }
 
-    else fault++;
+    else {
+      
+      fault++;
 
-    HTMLscore.innerHTML = `<h4>Score: ${score}</h4><h4>Fault: ${fault}</h4>`;
+      if (fault == 10){
+
+        HTMLresult.innerHTML = `<h1 style="color: red;">GAME OVER!</h1>`;
+
+      }
+
+    }
+
+    HTMLscore.innerHTML = `<h4>Score: <span>${score}</span></h4><h4>Fault: <span>${fault}</span></h4>`;
 
   }
 
@@ -133,30 +165,27 @@
 
         arr.push({ id: x, color: shades[1] });
 
-      output += `<li>
-                  <div class="block" onclick=decide(this.id) id="${x}">
-                  ${x+1}
-                  </div>
-                </li>`;
+      output += `<li><div class="block" onclick=decide(this.id) id="${x}"></div></li>`;
 
     }
 
+    // Change width of a block
     switch(blocksCount){
 
       case 4:
-        defDimen = 150;
+        defDimen = '150px';
         break;
 
       case 9:
-        defDimen = 100;
+        defDimen = '100px';
         break;
 
       case 16:
-        defDimen = 80;
+        defDimen = '80px';
         break;
 
       case 25:
-        defDimen = 70;
+        defDimen = '70px';
         break;
 
     }
@@ -164,8 +193,8 @@
     HTMLtarget.innerHTML = output;
 
     for(let idNum=0 ; idNum<arr.length ; idNum++){
-      document.getElementById(idNum).style.width = defDimen + 'px';
-      document.getElementById(idNum).style.height = defDimen + 'px';
+      document.getElementById(idNum).style.width = defDimen;
+      document.getElementById(idNum).style.height = defDimen;
     }
 
     // Giving background colors to divs
@@ -174,5 +203,8 @@
       document.getElementById(arr[y].id).style.backgroundColor = arr[y].color;
 
   }
+
+  HTMLscore.innerHTML = `<h4>Score: ${score}</h4><h4>Fault: ${fault}</h4>`;
+  HTMLdifficulty.innerHTML = difficulty();
 
   window.onload = start;

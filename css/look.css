@@ -1,0 +1,25 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Oswald', sans-serif, 'Tahoma';
+    letter-spacing: 0px;
+    background: #fff;
+    max-width: 100%;
+}
+
+
+ul#target {
+    width: 400px;  /* Must be here! */
+    list-style: none;    
+}
+
+ul#target li {
+    display: inline-block;
+    padding: 0px 2.5px 0px 2.5px;
+}
+
+ul#target li div {
+    cursor: pointer;
+    border-radius: 2px;
+    /* box-shadow: 22px 15px 17px rgba(0, 0, 0, 0.14); */
+}
