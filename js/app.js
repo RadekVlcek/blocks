@@ -1,8 +1,3 @@
-  HTMLtarget = document.getElementById('target');
-  HTMLscore = document.getElementById('score');
-  HTMLtime = document.getElementById('time');
-  HTMLdifficulty = document.getElementById('diff');
-
   // Initial Score / Fault
   let score = 0,
       fault = 0;
@@ -25,24 +20,26 @@
   // Difficulty
   let multipliColorBy = 0.10;
 
-  /**
-   * 0.10 - eazzy
-   * 0.065 - medium
-   * 0.04 - hardcore
-   */
+  // Initial score and faults in an object
+  let results = {
+    "score": 0,
+    "fault": 0
+  };
 
+
+  HTMLtarget = document.getElementById('target');
+  HTMLscore = document.getElementById('score');
+  HTMLtime = document.getElementById('time');
+  HTMLdifficulty = document.getElementById('diff');
+
+  //  Return difficulty in text
   function difficulty(){
-    if(multipliColorBy == 0.04)
-      return 'Hardcore';
 
-    if(multipliColorBy == 0.065)
-      return 'Medium';
+    if(multipliColorBy == 0.04) return 'Hardcore';
+    if(multipliColorBy == 0.065) return 'Medium';
+    if(multipliColorBy == 0.10) return 'Eazzy';
+    else return 'Not defined';
 
-    if(multipliColorBy == 0.10)
-      return 'Eazzy';
-
-    else
-      return 'Not defined';
 }
 
   // Generate a new shade
@@ -72,7 +69,7 @@
     
   }
 
-  // Time function
+  // Run the countdown
   function countDown(){
 
     HTMLtime.innerHTML = newTime;
@@ -95,17 +92,21 @@
 
   }
 
+  // Decide whether clicked on special or not and more...
   function decide(id){
 
     if(id == special){
-
-      // timer = 850;
 
       score++;
 
       if (score == 15){
 
         clearInterval(newInt);
+
+        results.score = score;
+        results.fault = fault;
+
+        console.log(results);
 
         HTMLtarget.innerHTML = `<h1 style="color: red;">You Won!</h1>`;
 
@@ -127,23 +128,19 @@
 
       fault++;
 
-      // NEW timer:
-
-      // clearInterval(newInt);
-
-      // timer = timer - 100;
-
-      // console.log("current timer: " + timer);
-
-      // countDown();
-
       if (fault == 5){
 
         clearInterval(newInt);
 
+        results.score = score;
+        results.fault = fault;
+
+        console.log(results);
+
         HTMLtarget.innerHTML = `<h1 style="color: red;">You failed too many times!</h1>`;
 
       }
+
     }  
 
     HTMLscore.innerHTML = `<h4>Score: <span>${score}</span></h4><h4>Fault: <span>${fault}</span></h4>`;
@@ -152,7 +149,7 @@
 
   function start(){
 
-    // Timer function
+    // Start countdown
     countDown(); 
 
     // Increasing amount of blocks
@@ -190,7 +187,7 @@
 
     }
 
-    // Change width of a block
+    // Change width of a block depending on blocksCount
     switch(blocksCount){
 
       case 4:
@@ -211,8 +208,10 @@
 
     }
 
+    // Output actual blocks
     HTMLtarget.innerHTML = output;
 
+    // Change width of all blocks displayed depending on switch results above
     for(let idNum=0 ; idNum<arr.length ; idNum++){
       document.getElementById(idNum).style.width = defDimen;
       document.getElementById(idNum).style.height = defDimen;
@@ -220,12 +219,13 @@
 
     // Giving background colors to divs
     for(let y=0 ; y<arr.length ; y++)
-
       document.getElementById(arr[y].id).style.backgroundColor = arr[y].color;
-
   }
 
+  // Always display score
   HTMLscore.innerHTML = `<h4>Score: ${score}</h4><h4>Fault: ${fault}</h4>`;
+
+  // Always display current difficulty
   HTMLdifficulty.innerHTML = difficulty();
 
   window.onload = start;
