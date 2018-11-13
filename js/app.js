@@ -1,30 +1,35 @@
-  HTMLresult = document.getElementById('result');
   HTMLtarget = document.getElementById('target');
   HTMLscore = document.getElementById('score');
   HTMLtime = document.getElementById('time');
   HTMLdifficulty = document.getElementById('diff');
 
-  score = 0;
-  fault = 0;
-  powerBy = 2;
+  // Initial Score / Fault
+  let score = 0,
+      fault = 0;
+
+  // Power to increase number of blocks
+  let powerBy = 2;
 
   // Default Dimensions (width,height) which later change
   let defDimen = 150;
 
   // To define that blocks count needs to increase every 2 times (after 3 times in the beginning)
-  blocksIncrease = 2;
-  timer = 1000;
+  let blocksIncrease = 2;
+  
+  // Default timer duration (Changes depending on difficulty)
+  let timer = 850;
 
-  // Time for countdown
+  // Time until timeout
   let newTime = 15;
   
-  multipliColorBy = 0.25;  // Difficulty
+  // Difficulty
+  let multipliColorBy = 0.10;
 
-/**
- * 0.10 - easy
- * 0.065 - medium
- * 0.04 - hard
- */
+  /**
+   * 0.10 - eazzy
+   * 0.065 - medium
+   * 0.04 - hardcore
+   */
 
   function difficulty(){
     if(multipliColorBy == 0.04)
@@ -82,7 +87,7 @@
 
         clearInterval(newInt);
 
-        HTMLresult.innerHTML = `<h1 style="color: red;">GAME OVER!</h1>`;
+        HTMLtarget.innerHTML = `<h1 style="color: red;">GAME OVER!</h1>`;
 
       }
 
@@ -94,36 +99,55 @@
 
     if(id == special){
 
-      clearInterval(newInt);
+      // timer = 850;
 
-      if(score == 18){
+      score++;
 
-        console.log('You are a hawk!');
+      if (score == 15){
 
-        return;
+        clearInterval(newInt);
+
+        HTMLtarget.innerHTML = `<h1 style="color: red;">You Won!</h1>`;
 
       }
 
-      score++;
-      
-      start();
+      else {
+
+        clearInterval(newInt);
+
+        newTime = 15;
+
+        start();
+
+      }
 
     }
 
     else {
-      
+
       fault++;
 
-      if (fault == 10){
+      // NEW timer:
 
-        HTMLresult.innerHTML = `<h1 style="color: red;">GAME OVER!</h1>`;
+      // clearInterval(newInt);
+
+      // timer = timer - 100;
+
+      // console.log("current timer: " + timer);
+
+      // countDown();
+
+      if (fault == 5){
+
+        clearInterval(newInt);
+
+        HTMLtarget.innerHTML = `<h1 style="color: red;">You failed too many times!</h1>`;
 
       }
-
-    }
+    }  
 
     HTMLscore.innerHTML = `<h4>Score: <span>${score}</span></h4><h4>Fault: <span>${fault}</span></h4>`;
-
+  
   }
 
   function start(){
@@ -139,10 +163,7 @@
         blocksIncrease = blocksIncrease + 2;
         
         powerBy++;
-        console.log("blocksCount: " + blocksCount + "\npowerBy: " + powerBy);
     }
-
-    console.log("blocksIncrease:" + blocksIncrease);
 
     // Generate a new shade each time the correct shade is clicked
     newShade();
