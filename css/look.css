@@ -7,7 +7,6 @@ body {
     max-width: 100%;
 }
 
-
 ul#target {
     width: 400px;  /* Must be here! */
     list-style: none;    
