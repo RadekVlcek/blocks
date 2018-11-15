@@ -21,7 +21,7 @@ var blocksIncrease = 2;
 // Default timer duration (Changes depending on difficulty)
 var timer = 800;
 
-// Time until timeout
+// Time until clearInterval
 var newTime = 15;
 
 // Difficulty - how much to add to trans variable (for transparecny)
@@ -29,19 +29,12 @@ var multipliColorBy = 0.1;
 
 //  Return difficulty in text
 function difficulty(){
-
   switch(multipliColorBy){
-    case 0.1: return 'Difficulty: Eazzy';
+    case 0.1: return 'Difficulty: Eazzy'; break;
     case 0.065: return 'Difficulty: Medium'; break;
     case 0.04: return 'Difficulty: Difficult'; break;
     case 0.03: return 'Difficulty: Hardcore!'; break;
   }
-
-  // if(multipliColorBy == 0.04) return 'Difficulty: Hardcore';
-  // if(multipliColorBy == 0.065) return 'Difficulty: Medium';
-  // if(multipliColorBy == 0.10) return 'Difficulty: Eazzy';
-  // else return 'Difficulty: Not defined';
-
 }
 
 // Generate a new shade
