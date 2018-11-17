@@ -54,9 +54,7 @@ function newShade(){
     let b = Math.floor((255 * a) / 100);
 
     let finalRGB = `rgb(${r}, ${g}, ${b}, ${trans})`;
-    
     shades.push(finalRGB);
-
     trans = trans + multipliColorBy;
 
     x++;
@@ -67,78 +65,55 @@ function newShade(){
   
   // Run the countdown (pass id to decide function)
   function countDown(){
-
     HTMLtime.innerHTML = `<span class="timeLeft">Time left: ${newTime}</span>`;
-
     newInt = setInterval(() => {
-
       newTime--;
-      
       HTMLtime.innerHTML = `<span class="timeLeft">Time left: ${newTime}</span>`;
 
       if(newTime < 1){
-
         clearInterval(newInt);
-
         HTMLtarget.innerHTML = `<h1 style="color: red;">GAME OVER!</h1>`;
-
       }
 
     }, timer);
-
   }
   
   // Decide whether clicked on special or not and more...
   function decide(id){
 
     if(id == special){
-
       score++;
 
-      if (score == 15){
-
-        // clearInterval(newInt);
-
-        HTMLtarget.innerHTML = `<h1 style="color: red;">You Won!</h1>`;
-
-      }
-
-      else {
-
+      if (score == 5){
         clearInterval(newInt);
-
+        HTMLtarget.innerHTML = `<h1 style="color: red;">You Won!</h1>`;
+      }
+      
+      else {
+        clearInterval(newInt);
         if(newTime == 14) newTime += 1;
-
         if(newTime < 14) newTime += 2;
-
         init();
-
       }
 
     }
 
     else {
-
       fault++;
-
       clearInterval(newInt);
 
       if (fault == 5){
-
         HTMLtarget.innerHTML = `<h1 style="color: red;">You failed too many times!</h1>`;
-
-      } 
+        return;
+      }
 
       if(newTime == 1) newTime -= 1;
-
       if(newTime > 1) newTime -= 2;
 
       countDown();
-
-    }  
+    }
 
     HTMLscore.innerHTML = `<h4>Score: <span>${score}</span></h4><h4>Fault: <span>${fault}</span></h4>`;
-  
   }
   
   function init(){
@@ -146,15 +121,14 @@ function newShade(){
     HTMLscore.innerHTML = `<h4>Score: <span>${score}</span></h4><h4>Fault: <span>${fault}</span></h4>`;
     HTMLdifficulty.innerHTML = difficulty();
 
+    // Start timer
     countDown();
 
     // Get amount of blocks depending on powerBy
     let blocksCount = Math.pow(powerBy, 2);
 
     if(score > blocksIncrease && powerBy < 5){
-
-        blocksIncrease = blocksIncrease + 2;
-        
+        blocksIncrease = blocksIncrease + 2; 
         powerBy++;
     }
 
@@ -172,11 +146,9 @@ function newShade(){
     for(let x=0 ; x<blocksCount ; x++){
 
       if(x == special)
-
         arr.push({ id: x, color: shades[0] });
 
       else
-
         arr.push({ id: x, color: shades[1] });
 
       output += `<li><div class="block" onclick=decide(this.id) id="${x}"></div></li>`;
@@ -200,7 +172,7 @@ function newShade(){
       document.getElementById(idNum).style.height = defDimen;
     }
 
-    // Giving background colors to divs
+    // Finally, giving background colors to divs
     for(let y=0 ; y<arr.length ; y++)
       document.getElementById(arr[y].id).style.backgroundColor = arr[y].color;
   }
