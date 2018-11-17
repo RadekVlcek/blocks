@@ -26,7 +26,7 @@ var timer = 800;
 var newTime = 15;
 
 // Controller for color generating
-var genCon = Math.floor(Math.random() * (0, 15));
+var genCon = Math.floor(Math.random() * (0, 30));
 
 // How much to add to trans variable (for transparecny)
 var multipliColorBy = [0.15, 0.075, 0.05, 0.04];
@@ -41,7 +41,7 @@ var difficulty = multipliColorBy[difInc];
 var levelIncrease = 100/15;
 
 /**
- * Static colors to be generated.
+ * 30 static colors to be generated.
  * Only rgb is being used, names are for my referrence.
  * Source: http://www.tayloredmktg.com/rgb/#OR
  */
@@ -62,20 +62,20 @@ var shadesToGenerate = [
   { name: 'Cadet Blue', rgb: '95,158,160'},
   { name: 'Deep Sky Blue', rgb: '0,191,255'},
   { name: 'Dark Slate Gray', rgb: '49,79,79'},
-  { name: 'Honeydew 4', rgb: '131-139-131'},
-  { name: 'Misty Rose', rgb: '255-228-225'},
-  { name: 'Dark Olive Green', rgb: '85-107-47'},
-  { name: 'Green Yellow', rgb: '173-255-47'},
-  { name: 'Forest Green', rgb: '34-139-34'},
-  { name: 'Dark Khaki', rgb: '189-183-107'},
-  { name: 'Tomato', rgb: '255-99-71'},
-  { name: 'Indian Red', rgb: '205-92-92'},
-  { name: 'Peru', rgb: '205-133-63'},
-  { name: 'Sandy Brown', rgb: '244-164-96'},
-  { name: 'Tan', rgb: '210-180-140'},
-  { name: 'Firebrick', rgb: '178-34-34'},
-  { name: 'Brown', rgb: '165-42-42'},
-  { name: 'Goldenrod', rgb: '218-165-32'},
+  { name: 'Honeydew 4', rgb: '131,139,131'},
+  { name: 'Misty Rose', rgb: '255,228,225'},
+  { name: 'Dark Olive Green', rgb: '85,107,47'},
+  { name: 'Green Yellow', rgb: '173,255,47'},
+  { name: 'Forest Green', rgb: '34,139,34'},
+  { name: 'Dark Khaki', rgb: '189,183,107'},
+  { name: 'Tomato', rgb: '255,99,71'},
+  { name: 'Indian Red', rgb: '205,92,92'},
+  { name: 'Peru', rgb: '205,133,63'},
+  { name: 'Sandy Brown', rgb: '244,164,96'},
+  { name: 'Tan', rgb: '210,180,140'},
+  { name: 'Firebrick', rgb: '178,34,34'},
+  { name: 'Brown', rgb: '165,42,42'},
+  { name: 'Goldenrod', rgb: '218,165,32'},
 ];
 
 //  Return difficulty in text
@@ -124,7 +124,7 @@ function newShade(){
   }
 
   // Temporary value
-  tempGenCon = Math.floor(Math.random() * (0, 15));
+  tempGenCon = Math.floor(Math.random() * (0, 30));
   
   console.log(`
     tempGenCon: ${tempGenCon}\n
