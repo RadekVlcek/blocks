@@ -4,6 +4,7 @@ HTMLtarget = document.getElementById('target');
 HTMLscore = document.getElementById('score');
 HTMLtime = document.getElementById('time');
 HTMLdifficulty = document.getElementById('diff');
+HTMLlevels = document.getElementById('levels-bar');
 
 // Initial Score / Fault
 var score = 0,
@@ -36,51 +37,54 @@ var difInc = 0;
 // Initial - Difficulty is depending on the value of multipliColorBy
 var difficulty = multipliColorBy[difInc];
 
+// Value used to increase width of progress bar
+var levelIncrease = 100/15;
+
 /**
-   * Static colors to be generated.
-   * Only rgb is being used, names are for my referrence.
-   * Source: http://www.tayloredmktg.com/rgb/#OR
-   */
-  var shadesToGenerate = [
-    { name: 'Hot Pink', rgb: '255,105,180'},
-    { name: 'Medium Aquamarine', rgb: '102,205,170'},
-    { name: 'Medium Slate Blue', rgb: '123,104,238'},
-    { name: 'Peach Puff 3', rgb: '205,175,149'},
-    { name: 'Slate Gray', rgb: '112,138,144'},
-    { name: 'Forest Green', rgb: '34,139,34'},
-    { name: 'Dark Salmon', rgb: '233,150,122'},
-    { name: 'Red', rgb: '255,0,0'},
-    { name: 'Medium Orchid', rgb: '186,85,211'},
-    { name: 'Orange Red', rgb: '255,69,0'},
-    { name: 'Indian Red', rgb: '205,92,92'},
-    { name: 'Dark Goldenrod', rgb: '184,134,11'},
-    { name: 'Light Sea Green', rgb: '32,178,170'},
-    { name: 'Cadet Blue', rgb: '95,158,160'},
-    { name: 'Deep Sky Blue', rgb: '0,191,255'},
-    { name: 'Dark Slate Gray', rgb: '49,79,79'},
-    { name: 'Honeydew 4', rgb: '131-139-131'},
-    { name: 'Misty Rose', rgb: '255-228-225'},
-    { name: 'Dark Olive Green', rgb: '85-107-47'},
-    { name: 'Green Yellow', rgb: '173-255-47'},
-    { name: 'Forest Green', rgb: '34-139-34'},
-    { name: 'Dark Khaki', rgb: '189-183-107'},
-    { name: 'Tomato', rgb: '255-99-71'},
-    { name: 'Indian Red', rgb: '205-92-92'},
-    { name: 'Peru', rgb: '205-133-63'},
-    { name: 'Sandy Brown', rgb: '244-164-96'},
-    { name: 'Tan', rgb: '210-180-140'},
-    { name: 'Firebrick', rgb: '178-34-34'},
-    { name: 'Brown', rgb: '165-42-42'},
-    { name: 'Goldenrod', rgb: '218-165-32'},
-  ];
+ * Static colors to be generated.
+ * Only rgb is being used, names are for my referrence.
+ * Source: http://www.tayloredmktg.com/rgb/#OR
+ */
+var shadesToGenerate = [
+  { name: 'Hot Pink', rgb: '255,105,180'},
+  { name: 'Medium Aquamarine', rgb: '102,205,170'},
+  { name: 'Medium Slate Blue', rgb: '123,104,238'},
+  { name: 'Peach Puff 3', rgb: '205,175,149'},
+  { name: 'Slate Gray', rgb: '112,138,144'},
+  { name: 'Forest Green', rgb: '34,139,34'},
+  { name: 'Dark Salmon', rgb: '233,150,122'},
+  { name: 'Red', rgb: '255,0,0'},
+  { name: 'Medium Orchid', rgb: '186,85,211'},
+  { name: 'Orange Red', rgb: '255,69,0'},
+  { name: 'Indian Red', rgb: '205,92,92'},
+  { name: 'Dark Goldenrod', rgb: '184,134,11'},
+  { name: 'Light Sea Green', rgb: '32,178,170'},
+  { name: 'Cadet Blue', rgb: '95,158,160'},
+  { name: 'Deep Sky Blue', rgb: '0,191,255'},
+  { name: 'Dark Slate Gray', rgb: '49,79,79'},
+  { name: 'Honeydew 4', rgb: '131-139-131'},
+  { name: 'Misty Rose', rgb: '255-228-225'},
+  { name: 'Dark Olive Green', rgb: '85-107-47'},
+  { name: 'Green Yellow', rgb: '173-255-47'},
+  { name: 'Forest Green', rgb: '34-139-34'},
+  { name: 'Dark Khaki', rgb: '189-183-107'},
+  { name: 'Tomato', rgb: '255-99-71'},
+  { name: 'Indian Red', rgb: '205-92-92'},
+  { name: 'Peru', rgb: '205-133-63'},
+  { name: 'Sandy Brown', rgb: '244-164-96'},
+  { name: 'Tan', rgb: '210-180-140'},
+  { name: 'Firebrick', rgb: '178-34-34'},
+  { name: 'Brown', rgb: '165-42-42'},
+  { name: 'Goldenrod', rgb: '218-165-32'},
+];
 
 //  Return difficulty in text
 function showDifficulty(){
   switch(difficulty){
-    case 0.15: return 'Difficulty: Eazzy';
-    case 0.075: return 'Difficulty: Medium';
-    case 0.05: return 'Difficulty: Difficult';
-    case 0.04: return 'Difficulty: Hardcore!';
+    case 0.15: return 'Eazzy';
+    case 0.075: return 'Medium';
+    case 0.05: return 'Hard';
+    case 0.04: return 'Hardcore!';
   }
 }
 
@@ -135,7 +139,6 @@ function newShade(){
 
   else
     newShade();
-
 }
   
   // Run the countdown (pass id to decide function)
@@ -154,7 +157,7 @@ function newShade(){
 
     }, timer);
   }
-  
+
   // Decide whether clicked on special or not and more...
   function decide(id){
 
@@ -163,7 +166,11 @@ function newShade(){
     if(id == special){
       score++;
 
-      if (score == 20){
+      // Increasing width of progress bar
+      HTMLlevels.style.width = `${levelIncrease}%`;
+      levelIncrease += 100/15;
+
+      if (score == 15){
         clearInterval(newInt);
         HTMLtarget.innerHTML = `<h1 style="color: red;">You Won!</h1>`;
       }

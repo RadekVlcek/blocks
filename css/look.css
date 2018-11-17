@@ -22,3 +22,27 @@ ul#target li div {
     border-radius: 2px;
     /* box-shadow: 22px 15px 17px rgba(0, 0, 0, 0.14); */
 }
+
+/* LEVELS */
+#levels-wrapper {
+    margin: 10px auto;
+    width: 40%;
+    background: #fff;
+}
+
+#levels-bar {
+    width: 0%;
+    height: 4px;
+    background: #e74c3c;
+    border-radius: 5px;
+    transition: width 0.3s;
+}
+
+#diff-title {
+    font-size: 14px;
+    text-align: left;
+}
+
+#diff {
+    font-size: 35px;
+}
