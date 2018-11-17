@@ -24,16 +24,22 @@ var timer = 800;
 // Time until clearInterval
 var newTime = 15;
 
-// Difficulty - how much to add to trans variable (for transparecny)
-var multipliColorBy = 0.1;
+// How much to add to trans variable (for transparecny)
+var multipliColorBy = [0.15, 0.075, 0.05, 0.04];
+
+// Initial - Incrementing difficulty in init() function
+var difInc = 0;
+
+// Initial - Difficulty is depending on the value of multipliColorBy
+var difficulty = multipliColorBy[difInc];
 
 //  Return difficulty in text
-function difficulty(){
-  switch(multipliColorBy){
-    case 0.1: return 'Difficulty: Eazzy';
-    case 0.065: return 'Difficulty: Medium';
-    case 0.04: return 'Difficulty: Difficult';
-    case 0.03: return 'Difficulty: Hardcore!';
+function showDifficulty(){
+  switch(difficulty){
+    case 0.15: return 'Difficulty: Eazzy';
+    case 0.075: return 'Difficulty: Medium';
+    case 0.05: return 'Difficulty: Difficult';
+    case 0.04: return 'Difficulty: Hardcore!';
   }
 }
 
@@ -55,7 +61,7 @@ function newShade(){
 
     let finalRGB = `rgb(${r}, ${g}, ${b}, ${trans})`;
     shades.push(finalRGB);
-    trans = trans + multipliColorBy;
+    trans = trans + difficulty;
 
     x++;
 
@@ -67,12 +73,14 @@ function newShade(){
   function countDown(){
     HTMLtime.innerHTML = `<span class="timeLeft">Time left: ${newTime}</span>`;
     newInt = setInterval(() => {
-      newTime--;
-      HTMLtime.innerHTML = `<span class="timeLeft">Time left: ${newTime}</span>`;
-
       if(newTime < 1){
         clearInterval(newInt);
         HTMLtarget.innerHTML = `<h1 style="color: red;">GAME OVER!</h1>`;
+      }
+
+      else {
+        newTime--;
+        HTMLtime.innerHTML = `<span class="timeLeft">Time left: ${newTime}</span>`;
       }
 
     }, timer);
@@ -81,10 +89,14 @@ function newShade(){
   // Decide whether clicked on special or not and more...
   function decide(id){
 
+    // console.log(`difInc: ${difInc}\ndifficulty: ${difficulty}`);
+
+    console.log(`score: ${score}\nblocksIncrease: ${blocksIncrease}`);
+
     if(id == special){
       score++;
 
-      if (score == 5){
+      if (score == 20){
         clearInterval(newInt);
         HTMLtarget.innerHTML = `<h1 style="color: red;">You Won!</h1>`;
       }
@@ -101,15 +113,15 @@ function newShade(){
     else {
       fault++;
       clearInterval(newInt);
-
+      
       if (fault == 5){
         HTMLtarget.innerHTML = `<h1 style="color: red;">You failed too many times!</h1>`;
         return;
       }
-
+      
       if(newTime == 1) newTime -= 1;
       if(newTime > 1) newTime -= 2;
-
+      
       countDown();
     }
 
@@ -119,7 +131,7 @@ function newShade(){
   function init(){
 
     HTMLscore.innerHTML = `<h4>Score: <span>${score}</span></h4><h4>Fault: <span>${fault}</span></h4>`;
-    HTMLdifficulty.innerHTML = difficulty();
+    HTMLdifficulty.innerHTML = showDifficulty();
 
     // Start timer
     countDown();
@@ -128,8 +140,9 @@ function newShade(){
     let blocksCount = Math.pow(powerBy, 2);
 
     if(score > blocksIncrease && powerBy < 5){
-        blocksIncrease = blocksIncrease + 2; 
-        powerBy++;
+        blocksIncrease += 3;
+        powerBy++ && difInc++;
+        difficulty = multipliColorBy[difInc];
     }
 
     // Generate a new shade each time the correct shade is clicked
