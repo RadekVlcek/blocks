@@ -24,6 +24,9 @@ var timer = 800;
 // Time until clearInterval
 var newTime = 15;
 
+// Controller for color generating
+var genCon = Math.floor(Math.random() * (0, 15));
+
 // How much to add to trans variable (for transparecny)
 var multipliColorBy = [0.15, 0.075, 0.05, 0.04];
 
@@ -32,6 +35,44 @@ var difInc = 0;
 
 // Initial - Difficulty is depending on the value of multipliColorBy
 var difficulty = multipliColorBy[difInc];
+
+/**
+   * Static colors to be generated.
+   * Only rgb is being used, names are for my referrence.
+   * Source: http://www.tayloredmktg.com/rgb/#OR
+   */
+  var shadesToGenerate = [
+    { name: 'Hot Pink', rgb: '255,105,180'},
+    { name: 'Medium Aquamarine', rgb: '102,205,170'},
+    { name: 'Medium Slate Blue', rgb: '123,104,238'},
+    { name: 'Peach Puff 3', rgb: '205,175,149'},
+    { name: 'Slate Gray', rgb: '112,138,144'},
+    { name: 'Forest Green', rgb: '34,139,34'},
+    { name: 'Dark Salmon', rgb: '233,150,122'},
+    { name: 'Red', rgb: '255,0,0'},
+    { name: 'Medium Orchid', rgb: '186,85,211'},
+    { name: 'Orange Red', rgb: '255,69,0'},
+    { name: 'Indian Red', rgb: '205,92,92'},
+    { name: 'Dark Goldenrod', rgb: '184,134,11'},
+    { name: 'Light Sea Green', rgb: '32,178,170'},
+    { name: 'Cadet Blue', rgb: '95,158,160'},
+    { name: 'Deep Sky Blue', rgb: '0,191,255'},
+    { name: 'Dark Slate Gray', rgb: '49,79,79'},
+    { name: 'Honeydew 4', rgb: '131-139-131'},
+    { name: 'Misty Rose', rgb: '255-228-225'},
+    { name: 'Dark Olive Green', rgb: '85-107-47'},
+    { name: 'Green Yellow', rgb: '173-255-47'},
+    { name: 'Forest Green', rgb: '34-139-34'},
+    { name: 'Dark Khaki', rgb: '189-183-107'},
+    { name: 'Tomato', rgb: '255-99-71'},
+    { name: 'Indian Red', rgb: '205-92-92'},
+    { name: 'Peru', rgb: '205-133-63'},
+    { name: 'Sandy Brown', rgb: '244-164-96'},
+    { name: 'Tan', rgb: '210-180-140'},
+    { name: 'Firebrick', rgb: '178-34-34'},
+    { name: 'Brown', rgb: '165-42-42'},
+    { name: 'Goldenrod', rgb: '218-165-32'},
+  ];
 
 //  Return difficulty in text
 function showDifficulty(){
@@ -43,30 +84,58 @@ function showDifficulty(){
   }
 }
 
+
 // Generate a new shade
 function newShade(){
   
-  let a = Math.floor(Math.random() * 100);  // between 0 - 100
+  /**
+   * It turned out that generating static colors works better than using
+   * old method by generating colors randomly.
+   */
+
+  /**
+   * OLD METHOD
+   * let a = Math.floor(Math.random() * 100);
+   */
   
   // Array to store two newly generated colors
-  shades = [];
+  shadesToUse = [];
   let trans = 0.5;
   let x = 0;
 
   while(x < 2){
     
-    let r = Math.floor((255 * a) / 100);  
-    let g = Math.floor((255 * (100 - a)) / 100);
-    let b = Math.floor((255 * a) / 100);
+    /**
+     * OLD METHOD:
+     * let r = Math.floor((255 * a) / 100);
+     * let g = Math.floor((255 * (100 - a)) / 100);
+     * let b = Math.floor((255 * a) / 100);
+     * let finalRGB = `rgb(${r}, ${g}, ${b}, ${trans})`;
+     */
 
-    let finalRGB = `rgb(${r}, ${g}, ${b}, ${trans})`;
-    shades.push(finalRGB);
+    let finalRGB = `rgb(${shadesToGenerate[genCon].rgb},${trans})`;
+    shadesToUse.push(finalRGB);
     trans = trans + difficulty;
-
     x++;
-
   }
-      
+
+  // Temporary value
+  tempGenCon = Math.floor(Math.random() * (0, 15));
+  
+  console.log(`
+    tempGenCon: ${tempGenCon}\n
+    genCon: ${genCon}\n
+    name: ${shadesToGenerate[genCon].name}\n
+    rgb: ${shadesToGenerate[genCon].rgb}
+  `);
+
+  // Measure to prevent generating the same color twice
+  if(tempGenCon != genCon)
+    genCon = tempGenCon;
+
+  else
+    newShade();
+
 }
   
   // Run the countdown (pass id to decide function)
@@ -88,8 +157,6 @@ function newShade(){
   
   // Decide whether clicked on special or not and more...
   function decide(id){
-
-    // console.log(`difInc: ${difInc}\ndifficulty: ${difficulty}`);
 
     console.log(`score: ${score}\nblocksIncrease: ${blocksIncrease}`);
 
@@ -159,10 +226,10 @@ function newShade(){
     for(let x=0 ; x<blocksCount ; x++){
 
       if(x == special)
-        arr.push({ id: x, color: shades[0] });
+        arr.push({ id: x, color: shadesToUse[0] });
 
       else
-        arr.push({ id: x, color: shades[1] });
+        arr.push({ id: x, color: shadesToUse[1] });
 
       output += `<li><div class="block" onclick=decide(this.id) id="${x}"></div></li>`;
 
