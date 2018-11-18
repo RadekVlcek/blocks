@@ -46,3 +46,20 @@ ul#target li div {
 #diff {
     font-size: 35px;
 }
+
+ul#ranks-wrapper {
+    height: 4px;
+    padding: 0;
+    margin: 0;
+    text-align: right;
+}
+
+ul#ranks-wrapper li {
+    display: inline-block;
+    width: 25%;
+}
+
+ul#ranks-wrapper li p {
+    margin: 0;
+    padding-top: 4px;
+}

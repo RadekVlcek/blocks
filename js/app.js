@@ -5,6 +5,7 @@ HTMLscore = document.getElementById('score');
 HTMLtime = document.getElementById('time');
 HTMLdifficulty = document.getElementById('diff');
 HTMLlevels = document.getElementById('levels-bar');
+HTMLranks = document.getElementsByClassName('rank-role')
 
 // Initial Score / Fault
 var score = 0,
@@ -17,7 +18,7 @@ var powerBy = 2;
 var defDimen = 150;
 
 // To define that blocks count needs to increase every 2 times (after 3 times in the beginning)
-var blocksIncrease = 2;
+var blocksIncrease = 4;
 
 // Default timer duration (Changes depending on difficulty)
 var timer = 800;
@@ -38,7 +39,7 @@ var difInc = 0;
 var difficulty = multipliColorBy[difInc];
 
 // Value used to increase width of progress bar
-var levelIncrease = 100/15;
+var levelIncrease = 100/20;
 
 /**
  * 30 static colors to be generated.
@@ -69,7 +70,7 @@ var shadesToGenerate = [
   { name: 'Forest Green', rgb: '34,139,34'},
   { name: 'Dark Khaki', rgb: '189,183,107'},
   { name: 'Tomato', rgb: '255,99,71'},
-  { name: 'Indian Red', rgb: '205,92,92'},
+  { name: 'Saddle Brown', rgb: '139,69,19'},
   { name: 'Peru', rgb: '205,133,63'},
   { name: 'Sandy Brown', rgb: '244,164,96'},
   { name: 'Tan', rgb: '210,180,140'},
@@ -81,13 +82,12 @@ var shadesToGenerate = [
 //  Return difficulty in text
 function showDifficulty(){
   switch(difficulty){
-    case 0.15: return 'Eazzy';
-    case 0.075: return 'Medium';
-    case 0.05: return 'Hard';
-    case 0.04: return 'Hardcore!';
+    case 0.15: return 'EAZZY';
+    case 0.075: return 'MEDIUM';
+    case 0.05: return 'HARD';
+    case 0.04: return 'HARDCORE!';
   }
 }
-
 
 // Generate a new shade
 function newShade(){
@@ -125,13 +125,13 @@ function newShade(){
 
   // Temporary value
   tempGenCon = Math.floor(Math.random() * (0, 30));
-  
-  console.log(`
-    tempGenCon: ${tempGenCon}\n
-    genCon: ${genCon}\n
-    name: ${shadesToGenerate[genCon].name}\n
-    rgb: ${shadesToGenerate[genCon].rgb}
-  `);
+
+  // console.log(`
+  //   tempGenCon: ${tempGenCon}\n
+  //   genCon: ${genCon}\n
+  //   name: ${shadesToGenerate[genCon].name}\n
+  //   rgb: ${shadesToGenerate[genCon].rgb}
+  // `);
 
   // Measure to prevent generating the same color twice
   if(tempGenCon != genCon)
@@ -141,7 +141,7 @@ function newShade(){
     newShade();
 }
   
-  // Run the countdown (pass id to decide function)
+  // Run the countdown
   function countDown(){
     HTMLtime.innerHTML = `<span class="timeLeft">Time left: ${newTime}</span>`;
     newInt = setInterval(() => {
@@ -158,19 +158,17 @@ function newShade(){
     }, timer);
   }
 
-  // Decide whether clicked on special or not and more...
+  // Decide whether clicked on special or not
   function decide(id){
-
-    console.log(`score: ${score}\nblocksIncrease: ${blocksIncrease}`);
 
     if(id == special){
       score++;
 
       // Increasing width of progress bar
       HTMLlevels.style.width = `${levelIncrease}%`;
-      levelIncrease += 100/15;
+      levelIncrease += 100/20;
 
-      if (score == 15){
+      if (score == 20){
         clearInterval(newInt);
         HTMLtarget.innerHTML = `<h1 style="color: red;">You Won!</h1>`;
       }
@@ -190,6 +188,7 @@ function newShade(){
       
       if (fault == 5){
         HTMLtarget.innerHTML = `<h1 style="color: red;">You failed too many times!</h1>`;
+        HTMLscore.innerHTML = `<h4>Score: <span>${score}/20</span></h4><h4>Fault: <span>${fault}/5</span></h4>`;
         return;
       }
       
@@ -199,12 +198,11 @@ function newShade(){
       countDown();
     }
 
-    HTMLscore.innerHTML = `<h4>Score: <span>${score}</span></h4><h4>Fault: <span>${fault}</span></h4>`;
+    HTMLscore.innerHTML = `<h4>Score: <span>${score}/20</span></h4><h4>Fault: <span>${fault}/5</span></h4>`;
   }
   
   function init(){
-
-    HTMLscore.innerHTML = `<h4>Score: <span>${score}</span></h4><h4>Fault: <span>${fault}</span></h4>`;
+    HTMLscore.innerHTML = `<h4>Score: <span>${score}/20</span></h4><h4>Fault: <span>${fault}/5</span></h4>`;
     HTMLdifficulty.innerHTML = showDifficulty();
 
     // Start timer
@@ -213,8 +211,9 @@ function newShade(){
     // Get amount of blocks depending on powerBy
     let blocksCount = Math.pow(powerBy, 2);
 
-    if(score > blocksIncrease && powerBy < 5){
-        blocksIncrease += 3;
+    if(score == blocksIncrease && powerBy < 5){
+        blocksIncrease += 5;
+        HTMLranks[difInc].style.color = 'red';
         powerBy++ && difInc++;
         difficulty = multipliColorBy[difInc];
     }
