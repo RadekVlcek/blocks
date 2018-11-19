@@ -6,6 +6,7 @@ HTMLtime = document.getElementById('time');
 HTMLdifficulty = document.getElementById('diff');
 HTMLlevels = document.getElementById('levels-bar');
 HTMLranks = document.getElementsByClassName('rank-role')
+HTMLsvg = document.getElementsByTagName('svg');
 
 // Initial Score / Fault
 var score = 0,
@@ -32,7 +33,7 @@ var newTime = 15;
 var genCon = Math.floor(Math.random() * (0, 30));
 
 // How much to add to trans variable (for transparecny)
-var multipliColorBy = [0.15, 0.075, 0.05, 0.04];
+var multipliColorBy = [0.15, 0.085, 0.06, 0.05, 0.04];
 
 // Initial - Incrementing difficulty in init() function
 var difInc = 0;
@@ -85,8 +86,9 @@ var shadesToGenerate = [
 function showDifficulty(){
   switch(difficulty){
     case 0.15: return 'EAZZY';
-    case 0.075: return 'MEDIUM';
-    case 0.05: return 'HARD';
+    case 0.085: return 'MEDIUM';
+    case 0.06: return 'HARD';
+    case 0.05: return 'BIT HARDER';
     case 0.04: return 'HARDCORE!';
   }
 }
@@ -206,9 +208,14 @@ function newShade(){
   
   function init(){
 
-    if(difInc > 0)
+    if(difInc > 0){
       HTMLranks[difInc-1].style.color = '#e74c3c';
+      HTMLsvg[difInc-1].style.fill = '#e74c3c';
+      console.log(HTMLsvg[difInc-1]);
+    }
 
+    
+    
     HTMLscore.innerHTML = `<h4>Score: <span>${score}/25</span></h4><h4>Fault: <span>${fault}/5</span></h4>`;
     HTMLdifficulty.innerHTML = showDifficulty();
 

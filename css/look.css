@@ -72,3 +72,7 @@ ul#ranks-wrapper li p {
     transition: color .15s;
     font-weight: bold;
 }
+
+svg {
+    transition: fill 0.15s;
+}
