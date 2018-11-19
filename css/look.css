@@ -63,3 +63,8 @@ ul#ranks-wrapper li p {
     margin: 0;
     padding-top: 4px;
 }
+
+.rank-role {
+    transition: color .15s;
+    font-weight: bold;
+}

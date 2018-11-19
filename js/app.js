@@ -126,12 +126,12 @@ function newShade(){
   // Temporary value
   tempGenCon = Math.floor(Math.random() * (0, 30));
 
-  // console.log(`
-  //   tempGenCon: ${tempGenCon}\n
-  //   genCon: ${genCon}\n
-  //   name: ${shadesToGenerate[genCon].name}\n
-  //   rgb: ${shadesToGenerate[genCon].rgb}
-  // `);
+  console.log(`
+    tempGenCon: ${tempGenCon}\n
+    genCon: ${genCon}\n
+    name: ${shadesToGenerate[genCon].name}\n
+    rgb: ${shadesToGenerate[genCon].rgb}
+  `);
 
   // Measure to prevent generating the same color twice
   if(tempGenCon != genCon)
@@ -211,9 +211,9 @@ function newShade(){
     // Get amount of blocks depending on powerBy
     let blocksCount = Math.pow(powerBy, 2);
 
-    if(score == blocksIncrease && powerBy < 5){
+    if(score > blocksIncrease && powerBy < 5){
         blocksIncrease += 5;
-        HTMLranks[difInc].style.color = 'red';
+        HTMLranks[difInc].style.color = '#e74c3c';
         powerBy++ && difInc++;
         difficulty = multipliColorBy[difInc];
     }
