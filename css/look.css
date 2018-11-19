@@ -8,7 +8,7 @@ body {
 }
 
 #target-blocks {
-    height: 380px;
+    height: 400px;
 }
 
 ul#target {
@@ -60,7 +60,7 @@ ul#ranks-wrapper {
 
 ul#ranks-wrapper li {
     display: inline-block;
-    width: 25%;
+    width: 20%;
 }
 
 ul#ranks-wrapper li p {

@@ -11,6 +11,8 @@ HTMLranks = document.getElementsByClassName('rank-role')
 var score = 0,
     fault = 0;
 
+var topScore = 25;
+
 // Power to increase number of blocks
 var powerBy = 2;
 
@@ -39,7 +41,7 @@ var difInc = 0;
 var difficulty = multipliColorBy[difInc];
 
 // Value used to increase width of progress bar
-var levelIncrease = 100/20;
+var levelIncrease = 100/topScore;
 
 /**
  * 30 static colors to be generated.
@@ -166,9 +168,9 @@ function newShade(){
 
       // Increasing width of progress bar
       HTMLlevels.style.width = `${levelIncrease}%`;
-      levelIncrease += 100/20;
+      levelIncrease += 100/topScore;
 
-      if (score == 20){
+      if (score == topScore){
         clearInterval(newInt);
         HTMLranks[difInc].style.color = '#e74c3c';
         HTMLtarget.innerHTML = `<h1 style="color: red;">You Won!</h1>`;
@@ -189,7 +191,7 @@ function newShade(){
       
       if (fault == 5){
         HTMLtarget.innerHTML = `<h1 style="color: red;">You failed too many times!</h1>`;
-        HTMLscore.innerHTML = `<h4>Score: <span>${score}/20</span></h4><h4>Fault: <span>${fault}/5</span></h4>`;
+        HTMLscore.innerHTML = `<h4>Score: <span>${score}/25</span></h4><h4>Fault: <span>${fault}/5</span></h4>`;
         return;
       }
       
@@ -199,7 +201,7 @@ function newShade(){
       countDown();
     }
 
-    HTMLscore.innerHTML = `<h4>Score: <span>${score}/20</span></h4><h4>Fault: <span>${fault}/5</span></h4>`;
+    HTMLscore.innerHTML = `<h4>Score: <span>${score}/25</span></h4><h4>Fault: <span>${fault}/5</span></h4>`;
   }
   
   function init(){
@@ -207,13 +209,7 @@ function newShade(){
     if(difInc > 0)
       HTMLranks[difInc-1].style.color = '#e74c3c';
 
-    console.log(`
-    diffInc: ${difInc}\n
-    score: ${score}\n
-    blocksIncrease: ${blocksIncrease}
-  `);
-
-    HTMLscore.innerHTML = `<h4>Score: <span>${score}/20</span></h4><h4>Fault: <span>${fault}/5</span></h4>`;
+    HTMLscore.innerHTML = `<h4>Score: <span>${score}/25</span></h4><h4>Fault: <span>${fault}/5</span></h4>`;
     HTMLdifficulty.innerHTML = showDifficulty();
 
     // Start timer
@@ -222,10 +218,10 @@ function newShade(){
     // Get amount of blocks depending on powerBy
     let blocksCount = Math.pow(powerBy, 2);
 
-    if(score == blocksIncrease && powerBy < 5){
+    if(score == blocksIncrease && powerBy < 6){
         blocksIncrease += 5;
         powerBy++ && difInc++;
-        difficulty = multipliColorBy[0];
+        difficulty = multipliColorBy[difInc];
       }
 
     // Generate a new shade each time the correct shade is clicked
@@ -257,6 +253,7 @@ function newShade(){
       case 9: defDimen = '100px'; break;
       case 16: defDimen = '80px';  break;
       case 25: defDimen = '70px'; break;
+      case 36: defDimen = '60px'; break;
     }
 
     // Output actual blocks
