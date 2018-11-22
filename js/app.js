@@ -85,7 +85,7 @@ var shadesToGenerate = [
 //  Return difficulty in text
 function showDifficulty(){
   switch(difficulty){
-    case 0.15: return 'EAZZY';
+    case 0.15: return 'EASY';
     case 0.085: return 'MEDIUM';
     case 0.06: return 'HARD';
     case 0.05: return 'BIT HARDER';
@@ -210,12 +210,9 @@ function newShade(){
 
     if(difInc > 0){
       HTMLranks[difInc-1].style.color = '#e74c3c';
-      HTMLsvg[difInc-1].style.fill = '#e74c3c';
-      console.log(HTMLsvg[difInc-1]);
+      // HTMLsvg[difInc-1].style.fill = '#e74c3c';
     }
 
-    
-    
     HTMLscore.innerHTML = `<h4>Score: <span>${score}/25</span></h4><h4>Fault: <span>${fault}/5</span></h4>`;
     HTMLdifficulty.innerHTML = showDifficulty();
 
