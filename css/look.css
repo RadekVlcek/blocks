@@ -39,6 +39,9 @@ ul#target li div {
     height: 4px;
     background: #e74c3c;
     border-radius: 5px;
+    -webkit-transition: width 0.3s;
+    -moz-transition: width 0.3s;
+    -ms-transition: width 0.3s;
     transition: width 0.3s;
 }
 
@@ -69,6 +72,9 @@ ul#ranks-wrapper li p {
 }
 
 .rank-role {
+    -webkit-transition: color .15s;
+    -moz-transition: color .15s;
+    -ms-transition: color .15s;
     transition: color .15s;
     font-weight: bold;
 }
@@ -80,12 +86,32 @@ ul#ranks-wrapper li p {
     font-size: 35px;
 }
 
-.timeLeft {
+#time {
     font-size: 30px;
     font-weight: bold;
     color: #26a65b;
-    /* width: 50px; */
-    padding: 3px 17px 3px 17px;
     border: 2px solid #26a65b; 
+    width: 45px;
+    text-align: center;
     border-radius: 50%;
 }
+
+#score, #scorePlus {
+    display: inline-block;
+}
+
+#fault, #faultPlus {
+    display: inline-block;
+}
+
+#scorePlus, #faultPlus {
+    opacity: 0;
+    -webkit-transition: opacity .2s, transform .15s;
+    -moz-transition: opacity .2s, transform .15s;
+    -ms-transition: opacity .2s, transform .15s;
+    transition: opacity .2s, transform .15s;
+}
+
+#scorePlus { color: #26a65b; }
+
+#faultPlus { color: #e74c3c; }

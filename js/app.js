@@ -2,11 +2,13 @@ window.onload = init;
 
 HTMLtarget = document.getElementById('target');
 HTMLscore = document.getElementById('score');
+HTMLfault = document.getElementById('fault');
+HTMLscorePlus = document.getElementById('scorePlus');
+HTMLfaultPlus = document.getElementById('faultPlus');
 HTMLtime = document.getElementById('time');
 HTMLdifficulty = document.getElementById('diff');
 HTMLlevels = document.getElementById('levels-bar');
 HTMLranks = document.getElementsByClassName('rank-role')
-HTMLsvg = document.getElementsByTagName('svg');
 
 // Initial Score / Fault
 var score = 0,
@@ -149,6 +151,16 @@ function newShade(){
   function countDown(){
     HTMLtime.innerHTML = `<span class="timeLeft">${newTime}</span>`;
     newInt = setInterval(() => {
+      if(newTime > 5){
+        HTMLtime.style.border = '2px solid #26a65b';
+        HTMLtime.style.color = '#26a65b';
+      }
+  
+      if(newTime < 7){
+        HTMLtime.style.border = '2px dotted #e74c3c';
+        HTMLtime.style.color = '#e74c3c';
+      }
+      
       if(newTime < 1){
         clearInterval(newInt);
         HTMLtarget.innerHTML = `<h1 style="color: red;">GAME OVER!</h1>`;
@@ -162,15 +174,23 @@ function newShade(){
     }, timer);
   }
 
+  
+
   // Decide whether clicked on special or not
   function decide(id){
-
     if(id == special){
       score++;
 
       // Increasing width of progress bar
       HTMLlevels.style.width = `${levelIncrease}%`;
       levelIncrease += 100/topScore;
+
+      HTMLscorePlus.style.opacity = '1';
+      HTMLscorePlus.style.transform = 'translate(15px)';
+      setTimeout(function(){
+        HTMLscorePlus.style.opacity = '0';
+        HTMLscorePlus.style.transform = 'translate(-15px)';
+      }, 400);
 
       if (score == topScore){
         clearInterval(newInt);
@@ -191,29 +211,36 @@ function newShade(){
       fault++;
       clearInterval(newInt);
       
+      HTMLfaultPlus.style.opacity = '1';
+      HTMLfaultPlus.style.transform = 'translate(15px)';
+      setTimeout(function(){
+        HTMLfaultPlus.style.opacity = '0';
+        HTMLfaultPlus.style.transform = 'translate(-15px)';
+      }, 400);
+
       if (fault == 5){
         HTMLtarget.innerHTML = `<h1 style="color: red;">You failed too many times!</h1>`;
-        HTMLscore.innerHTML = `<h4>Score: <span class="score-fault-output">${score}</span>/25</h4><h4>Fault: <span class="score-fault-output">${fault}</span>/5</h4>`;
+
+        HTMLscore.innerHTML = `<h4>Score: <span class="score-fault-output">${score}</span>/25</h4>`;
+        HTMLfault.innerHTML = `<h4>Fault: <span class="score-fault-output">${fault}</span>/5</h4>`;
         return;
       }
       
       if(newTime == 1) newTime -= 1;
       if(newTime > 1) newTime -= 2;
-      
+
+      HTMLscore.innerHTML = `<h4>Score: <span class="score-fault-output">${score}</span>/25</h4>`;
+      HTMLfault.innerHTML = `<h4>Fault: <span class="score-fault-output">${fault}</span>/5</h4>`;
       countDown();
     }
-
-    HTMLscore.innerHTML = `<h4>Score: <span class="score-fault-output">${score}</span>/25</h4><h4>Fault: <span class="score-fault-output">${fault}</span>/5</h4>`;
   }
   
   function init(){
-
-    if(difInc > 0){
+    if(difInc > 0)
       HTMLranks[difInc-1].style.color = '#e74c3c';
-      // HTMLsvg[difInc-1].style.fill = '#e74c3c';
-    }
 
-    HTMLscore.innerHTML = `<h4>Score: <span class="score-fault-output">${score}</span>/25</h4><h4>Fault: <span class="score-fault-output">${fault}</span>/5</h4>`;
+    HTMLscore.innerHTML = `<h4>Score: <span class="score-fault-output">${score}</span>/25</h4>`;
+    HTMLfault.innerHTML = `<h4>Fault: <span class="score-fault-output">${fault}</span>/5</h4>`;
     HTMLdifficulty.innerHTML = showDifficulty();
 
     // Start timer
