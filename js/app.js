@@ -147,7 +147,7 @@ function newShade(){
   
   // Run the countdown
   function countDown(){
-    HTMLtime.innerHTML = `<span class="timeLeft">Time left: ${newTime}</span>`;
+    HTMLtime.innerHTML = `<span class="timeLeft">${newTime}</span>`;
     newInt = setInterval(() => {
       if(newTime < 1){
         clearInterval(newInt);
@@ -156,7 +156,7 @@ function newShade(){
 
       else {
         newTime--;
-        HTMLtime.innerHTML = `<span class="timeLeft">Time left: ${newTime}</span>`;
+        HTMLtime.innerHTML = `<span class="timeLeft">${newTime}</span>`;
       }
 
     }, timer);
@@ -193,7 +193,7 @@ function newShade(){
       
       if (fault == 5){
         HTMLtarget.innerHTML = `<h1 style="color: red;">You failed too many times!</h1>`;
-        HTMLscore.innerHTML = `<h4>Score: <span>${score}/25</span></h4><h4>Fault: <span>${fault}/5</span></h4>`;
+        HTMLscore.innerHTML = `<h4>Score: <span class="score-fault-output">${score}</span>/25</h4><h4>Fault: <span class="score-fault-output">${fault}</span>/5</h4>`;
         return;
       }
       
@@ -203,7 +203,7 @@ function newShade(){
       countDown();
     }
 
-    HTMLscore.innerHTML = `<h4>Score: <span>${score}/25</span></h4><h4>Fault: <span>${fault}/5</span></h4>`;
+    HTMLscore.innerHTML = `<h4>Score: <span class="score-fault-output">${score}</span>/25</h4><h4>Fault: <span class="score-fault-output">${fault}</span>/5</h4>`;
   }
   
   function init(){
@@ -213,7 +213,7 @@ function newShade(){
       // HTMLsvg[difInc-1].style.fill = '#e74c3c';
     }
 
-    HTMLscore.innerHTML = `<h4>Score: <span>${score}/25</span></h4><h4>Fault: <span>${fault}/5</span></h4>`;
+    HTMLscore.innerHTML = `<h4>Score: <span class="score-fault-output">${score}</span>/25</h4><h4>Fault: <span class="score-fault-output">${fault}</span>/5</h4>`;
     HTMLdifficulty.innerHTML = showDifficulty();
 
     // Start timer

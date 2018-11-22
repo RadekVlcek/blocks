@@ -72,3 +72,20 @@ ul#ranks-wrapper li p {
     transition: color .15s;
     font-weight: bold;
 }
+
+
+/* Score/Fault and Time */
+
+.score-fault-output {
+    font-size: 35px;
+}
+
+.timeLeft {
+    font-size: 30px;
+    font-weight: bold;
+    color: #26a65b;
+    /* width: 50px; */
+    padding: 3px 17px 3px 17px;
+    border: 2px solid #26a65b; 
+    border-radius: 50%;
+}
