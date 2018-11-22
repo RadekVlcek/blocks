@@ -8,7 +8,7 @@ body {
 }
 
 #target-blocks {
-    height: 400px;
+    height: 408px;
 }
 
 ul#target {
@@ -29,8 +29,8 @@ ul#target li div {
 
 /* LEVELS */
 #levels-wrapper {
-    margin: 10px auto;
-    width: 40%;
+    margin: 1% 0px 0px 200px;
+    width: 50%;
     background: #fff;
 }
 
@@ -115,3 +115,44 @@ ul#ranks-wrapper li p {
 #scorePlus { color: #26a65b; }
 
 #faultPlus { color: #e74c3c; }
+
+/* Question */
+#question {
+    line-height: 15px;
+    vertical-align: top;
+}
+
+#q-line-height {
+    line-height: 2px;
+}
+
+#question h1:first-of-type {
+    font-size: 90px;
+}
+
+#q-line-height #q-unique {
+    font-size: 20px;
+    letter-spacing: 10px;
+    margin-left: 35px;;
+}
+
+#question h1:last-of-type {
+    font-size: 48px;
+}
+
+/* Details */
+#details {
+    vertical-align: top;
+    margin: 30px 0px 0px 20px;
+}
+
+/* Layout styling */
+#big-boss {
+    height: auto;
+    margin: 0px auto;
+    width: 1000px;
+}
+
+#question, #target-blocks, #details {
+    display: inline-block;
+}

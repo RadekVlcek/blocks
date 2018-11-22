@@ -87,10 +87,10 @@ var shadesToGenerate = [
 //  Return difficulty in text
 function showDifficulty(){
   switch(difficulty){
-    case 0.15: return 'EASY';
-    case 0.085: return 'MEDIUM';
-    case 0.06: return 'HARD';
-    case 0.05: return 'BIT HARDER';
+    case 0.15: return 'WARM UP';
+    case 0.085: return 'EASY';
+    case 0.06: return 'MEDIUM';
+    case 0.05: return 'HARD';
     case 0.04: return 'HARDCORE!';
   }
 }
@@ -229,10 +229,11 @@ function newShade(){
       if(newTime == 1) newTime -= 1;
       if(newTime > 1) newTime -= 2;
 
-      HTMLscore.innerHTML = `<h4>Score: <span class="score-fault-output">${score}</span>/25</h4>`;
-      HTMLfault.innerHTML = `<h4>Fault: <span class="score-fault-output">${fault}</span>/5</h4>`;
       countDown();
     }
+    
+    HTMLscore.innerHTML = `<h4>Score: <span class="score-fault-output">${score}</span>/25</h4>`;
+    HTMLfault.innerHTML = `<h4>Fault: <span class="score-fault-output">${fault}</span>/5</h4>`;
   }
   
   function init(){
@@ -252,7 +253,7 @@ function newShade(){
     if(score == blocksIncrease && powerBy < 6){
         blocksIncrease += 5;
         powerBy++ && difInc++;
-        difficulty = multipliColorBy[difInc];
+        difficulty = multipliColorBy[0];
       }
 
     // Generate a new shade each time the correct shade is clicked
