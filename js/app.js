@@ -253,7 +253,7 @@ function newShade(){
     if(score == blocksIncrease && powerBy < 6){
         blocksIncrease += 5;
         powerBy++ && difInc++;
-        difficulty = multipliColorBy[0];
+        difficulty = multipliColorBy[difInc];
       }
 
     // Generate a new shade each time the correct shade is clicked
