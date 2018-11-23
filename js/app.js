@@ -150,12 +150,7 @@ function newShade(){
   // Run the countdown
   function countDown(){
     HTMLtime.innerHTML = `<span class="timeLeft">${newTime}</span>`;
-    newInt = setInterval(() => {
-      if(newTime > 5){
-        HTMLtime.style.border = '2px solid #26a65b';
-        HTMLtime.style.color = '#26a65b';
-      }
-  
+    newInt = setInterval(() => {  
       if(newTime < 7){
         HTMLtime.style.border = '2px dotted #e74c3c';
         HTMLtime.style.color = '#e74c3c';
@@ -237,6 +232,12 @@ function newShade(){
   }
   
   function init(){
+    // Check if time is above 5 again
+    if(newTime > 5){
+      HTMLtime.style.border = '2px solid #26a65b';
+      HTMLtime.style.color = '#26a65b';
+    }
+
     if(difInc > 0)
       HTMLranks[difInc-1].style.color = '#e74c3c';
 
@@ -254,7 +255,7 @@ function newShade(){
         blocksIncrease += 5;
         powerBy++ && difInc++;
         difficulty = multipliColorBy[difInc];
-      }
+       }
 
     // Generate a new shade each time the correct shade is clicked
     newShade();
