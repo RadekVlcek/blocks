@@ -12,6 +12,7 @@ HTMLlevels = document.getElementById('levels-bar');
 HTMLranks = document.getElementsByClassName('rank-role')
 HTMLscoreHistory = document.getElementById('score-history');
 HTMLquotes = document.getElementById('quotes');
+HTMLquestion = document.getElementById('question');
 
 // Initial Score / Fault
 var score = 0,
@@ -49,7 +50,7 @@ var difficulty = multipliColorBy[difInc];
 // Value used to increase width of progress bar
 var levelIncrease = 100/topScore;
 
-// Store score, fault and rank obtained to Local Storage
+// To store gaming data in local storage
 var historyData = {};
 
 /**
@@ -90,7 +91,7 @@ var shadesToGenerate = [
   { name: 'Goldenrod', rgb: '218,165,32'},
 ];
 
-// Quotes to print
+// Quotes to print randomly
 var quotes = [
   { text: 'Failure will never overtake me if my determination to succeed is strong enough', by: 'Og Mandino' },
   { text: 'Failure is the key to success; each mistake teaches us something.', by: 'Morihei Ueshiba' },
@@ -102,10 +103,12 @@ var quotes = [
 ]
 
 // Create an empty array in Local Storage if none exists
+// This should be a part of "Play" button function
 if(localStorage.getItem('history') === null)
   localStorage.setItem('history', '[]');
 
 function showHistory(data){
+  HTMLquestion.style.visibility = 'hidden';
   HTMLtarget.style.display = 'none';
   HTMLhistory.style.display = 'block';
 
@@ -126,14 +129,15 @@ function showHistory(data){
     `;
   }
 
+  // Finally print history table
   HTMLscoreHistory.innerHTML = `
-    <th>Score</th><th>Fault</th><th>Rank</th>
+    <tr><th>Score</th><th>Fault</th><th>Sight as good as</th></tr>
     ${historyOutput}
   `;
 
   // Show quote
   let output = Math.floor(Math.random() * 7);
-  HTMLquotes.innerHTML = `<p>${quotes[output].text}</p><p>— ${quotes[output].by}</p>`;
+  HTMLquotes.innerHTML = `<p>${quotes[output].text}</p><p>&mdash; ${quotes[output].by}</p>`;
 }
 
 //  Return difficulty in text
@@ -184,13 +188,6 @@ function newShade(){
   // Temporary value
   tempGenCon = Math.floor(Math.random() * (0, 30));
 
-  // console.log(`
-  //   tempGenCon: ${tempGenCon}\n
-  //   genCon: ${genCon}\n
-  //   name: ${shadesToGenerate[genCon].name}\n
-  //   rgb: ${shadesToGenerate[genCon].rgb}
-  // `);
-
   // Measure to prevent generating the same color twice
   if(tempGenCon != genCon)
     genCon = tempGenCon;
@@ -230,8 +227,6 @@ function newShade(){
     }, timer);
   }
 
-  
-
   // Decide whether clicked on special or not
   function decide(id){
     if(id == special){
@@ -260,7 +255,6 @@ function newShade(){
         };
 
         showHistory(historyData);
-        
         HTMLranks[difInc].style.color = '#e74c3c';
         HTMLtarget.innerHTML = `<h1 style="color: red;">You Won!</h1>`;
       }
