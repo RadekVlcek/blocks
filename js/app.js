@@ -1,6 +1,7 @@
 window.onload = init;
 
 HTMLtarget = document.getElementById('target');
+HTMLhistory = document.getElementById('history');
 HTMLscore = document.getElementById('score');
 HTMLfault = document.getElementById('fault');
 HTMLscorePlus = document.getElementById('scorePlus');
@@ -9,6 +10,8 @@ HTMLtime = document.getElementById('time');
 HTMLdifficulty = document.getElementById('diff');
 HTMLlevels = document.getElementById('levels-bar');
 HTMLranks = document.getElementsByClassName('rank-role')
+HTMLscoreHistory = document.getElementById('score-history');
+HTMLquotes = document.getElementById('quotes');
 
 // Initial Score / Fault
 var score = 0,
@@ -83,6 +86,26 @@ var shadesToGenerate = [
   { name: 'Brown', rgb: '165,42,42'},
   { name: 'Goldenrod', rgb: '218,165,32'},
 ];
+
+// Quotes to print
+var quotes = [
+  { text: 'Failure will never overtake me if my determination to succeed is strong enough', by: 'Og Mandino' },
+  { text: 'Failure is the key to success; each mistake teaches us something.', by: 'Morihei Ueshiba' },
+  { text: 'Success consists of going from failure to failure without loss of enthusiasm.', by: 'Winston Churchill' },
+  { text: 'Without failure there is no achievement.', by: 'John C. Maxwell' },
+  { text: 'You have to be able to accept failure to get better.', by: 'LeBron James' },
+  { text: 'If you want to increase your success rate, double your failure rate.', by: 'Thomas J. Watson' },
+  { text: 'If things are not failing, you are not innovating enough.', by: 'Elon Musk' },
+]
+
+function showHistory(){
+  HTMLtarget.style.display = 'none';
+  HTMLhistory.style.display = 'block';
+
+  // Show quote
+  let output = Math.floor(Math.random() * 7);
+  HTMLquotes.innerHTML = `<p>${quotes[output].text}</p><p>— ${quotes[output].by}</p>`;
+}
 
 //  Return difficulty in text
 function showDifficulty(){
@@ -159,6 +182,8 @@ function newShade(){
       if(newTime < 1){
         clearInterval(newInt);
         HTMLtarget.innerHTML = `<h1 style="color: red;">GAME OVER!</h1>`;
+
+        showHistory()
       }
 
       else {
@@ -218,6 +243,8 @@ function newShade(){
 
         HTMLscore.innerHTML = `<h4>Score: <span class="score-fault-output">${score}</span>/25</h4>`;
         HTMLfault.innerHTML = `<h4>Fault: <span class="score-fault-output">${fault}</span>/5</h4>`;
+
+        showHistory()
         return;
       }
       

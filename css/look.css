@@ -59,6 +59,17 @@ ul#target li div {
     border-radius: 2px;
 }
 
+#history {
+    display: none;
+    width: 400px;
+    text-align: center;
+}
+
+#history #quotes {    
+    font-size: 14px;
+    padding: 25px;
+}
+
 /* LEVELS */
 #levels-wrapper {
     margin: 1% 0px 0px 50px;
