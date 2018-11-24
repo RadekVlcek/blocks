@@ -49,6 +49,9 @@ var difficulty = multipliColorBy[difInc];
 // Value used to increase width of progress bar
 var levelIncrease = 100/topScore;
 
+// Store score, fault and rank obtained to Local Storage
+var historyData = {};
+
 /**
  * 30 static colors to be generated.
  * Only rgb is being used, names are for my referrence.
@@ -98,9 +101,35 @@ var quotes = [
   { text: 'If things are not failing, you are not innovating enough.', by: 'Elon Musk' },
 ]
 
-function showHistory(){
+// Create an empty array in Local Storage if none exists
+if(localStorage.getItem('history') === null)
+  localStorage.setItem('history', '[]');
+
+function showHistory(data){
   HTMLtarget.style.display = 'none';
   HTMLhistory.style.display = 'block';
+
+  // Load score history
+  var storeHistory = JSON.parse(localStorage.getItem('history'));
+  const historyAmount = storeHistory.length;
+  storeHistory.push(data);
+  localStorage.setItem('history', JSON.stringify(storeHistory));
+
+  var historyOutput;
+  for(let hC=0 ; hC<=historyAmount ; hC++){
+    historyOutput += `
+    <tr>
+      <td>${JSON.parse(localStorage.getItem('history'))[hC].score}</td>
+      <td>${JSON.parse(localStorage.getItem('history'))[hC].fault}</td>
+      <td>${JSON.parse(localStorage.getItem('history'))[hC].rank}</td>
+    </tr>
+    `;
+  }
+
+  HTMLscoreHistory.innerHTML = `
+    <th>Score</th><th>Fault</th><th>Rank</th>
+    ${historyOutput}
+  `;
 
   // Show quote
   let output = Math.floor(Math.random() * 7);
@@ -183,7 +212,14 @@ function newShade(){
         clearInterval(newInt);
         HTMLtarget.innerHTML = `<h1 style="color: red;">GAME OVER!</h1>`;
 
-        showHistory()
+        // Store data to historyData array
+        historyData = {
+            "score": score,
+            "fault": fault,
+            "rank": HTMLranks[difInc].innerHTML
+          };
+
+        showHistory(historyData);
       }
 
       else {
@@ -205,6 +241,7 @@ function newShade(){
       HTMLlevels.style.width = `${levelIncrease}%`;
       levelIncrease += 100/topScore;
 
+      // Animating +1
       HTMLscorePlus.style.opacity = '1';
       HTMLscorePlus.style.transform = 'translate(15px)';
       setTimeout(function(){
@@ -214,6 +251,16 @@ function newShade(){
 
       if (score == topScore){
         clearInterval(newInt);
+
+        // Store data to historyData array
+        historyData = {
+          "score": score,
+          "fault": fault,
+          "rank": HTMLranks[difInc].innerHTML
+        };
+
+        showHistory(historyData);
+        
         HTMLranks[difInc].style.color = '#e74c3c';
         HTMLtarget.innerHTML = `<h1 style="color: red;">You Won!</h1>`;
       }
@@ -231,6 +278,7 @@ function newShade(){
       fault++;
       clearInterval(newInt);
       
+      // Animating +1
       HTMLfaultPlus.style.opacity = '1';
       HTMLfaultPlus.style.transform = 'translate(15px)';
       setTimeout(function(){
@@ -244,7 +292,14 @@ function newShade(){
         HTMLscore.innerHTML = `<h4>Score: <span class="score-fault-output">${score}</span>/25</h4>`;
         HTMLfault.innerHTML = `<h4>Fault: <span class="score-fault-output">${fault}</span>/5</h4>`;
 
-        showHistory()
+        // Store data to historyData array
+        historyData = {
+          "score": score,
+          "fault": fault,
+          "rank": HTMLranks[difInc].innerHTML
+        };
+
+        showHistory(historyData);
         return;
       }
       
@@ -259,6 +314,7 @@ function newShade(){
   }
   
   function init(){
+
     // Check if time is above 5 again
     if(newTime > 5){
       HTMLtime.style.border = '2px solid #26a65b';
