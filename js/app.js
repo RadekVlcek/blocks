@@ -78,7 +78,7 @@ var shadesToGenerate = [
   { name: 'Honeydew 4', rgb: '131,139,131'},
   { name: 'Misty Rose', rgb: '255,228,225'},
   { name: 'Dark Olive Green', rgb: '85,107,47'},
-  { name: 'Green Yellow', rgb: '173,255,47'},
+  { name: 'Lime Green', rgb: '50,205,50'},
   { name: 'Forest Green', rgb: '34,139,34'},
   { name: 'Dark Khaki', rgb: '189,183,107'},
   { name: 'Tomato', rgb: '255,99,71'},
@@ -106,6 +106,18 @@ var quotes = [
 // This should be a part of "Play" button function
 if(localStorage.getItem('history') === null)
   localStorage.setItem('history', '[]');
+
+// Store history data
+function storeHistory(){
+  historyData = {
+    "score": score,
+    "fault": fault,
+    "rank": HTMLranks[difInc].innerHTML,
+    "date": getDate()
+  };
+  
+  showHistory(historyData);
+}
 
 // Get current date
 function getDate(){
@@ -223,14 +235,7 @@ function newShade(){
         HTMLtarget.innerHTML = `<h1 style="color: red;">GAME OVER!</h1>`;
 
         // Store data to historyData array
-        historyData = {
-            "score": score,
-            "fault": fault,
-            "rank": HTMLranks[difInc].innerHTML,
-            "date": getDate()
-          };
-
-        showHistory(historyData);
+        storeHistory();
       }
 
       else {
@@ -262,14 +267,8 @@ function newShade(){
         clearInterval(newInt);
 
         // Store data to historyData array
-        historyData = {
-          "score": score,
-          "fault": fault,
-          "rank": HTMLranks[difInc].innerHTML,
-          "date": getDate()
-        };
+        storeHistory();
 
-        showHistory(historyData);
         HTMLranks[difInc].style.color = '#e74c3c';
         HTMLtarget.innerHTML = `<h1 style="color: red;">You Won!</h1>`;
       }
@@ -302,14 +301,7 @@ function newShade(){
         HTMLfault.innerHTML = `<h4>Fault: <span class="score-fault-output">${fault}</span>/5</h4>`;
 
         // Store data to historyData array
-        historyData = {
-          "score": score,
-          "fault": fault,
-          "rank": HTMLranks[difInc].innerHTML,
-          "date": getDate()
-        };
-
-        showHistory(historyData);
+        storeHistory();
         return;
       }
       
