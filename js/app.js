@@ -107,7 +107,19 @@ var quotes = [
 if(localStorage.getItem('history') === null)
   localStorage.setItem('history', '[]');
 
+// Get current date
+function getDate(){
+  let date = new Date();
+  let d = date.getDate();
+  let m = date.getMonth();
+  let y = date.getFullYear();
+
+  return `${d}.${m+1}.${y}`;
+}
+
 function showHistory(data){
+  console.log(data);
+  
   HTMLquestion.style.visibility = 'hidden';
   HTMLtarget.style.display = 'none';
   HTMLhistory.style.display = 'block';
@@ -122,6 +134,7 @@ function showHistory(data){
   for(let hC=0 ; hC<=historyAmount ; hC++){
     historyOutput += `
     <tr>
+      <td>${JSON.parse(localStorage.getItem('history'))[hC].date}</td>
       <td>${JSON.parse(localStorage.getItem('history'))[hC].score}</td>
       <td>${JSON.parse(localStorage.getItem('history'))[hC].fault}</td>
       <td>${JSON.parse(localStorage.getItem('history'))[hC].rank}</td>
@@ -131,7 +144,7 @@ function showHistory(data){
 
   // Finally print history table
   HTMLscoreHistory.innerHTML = `
-    <tr><th>Score</th><th>Fault</th><th>Sight as good as</th></tr>
+    <tr><th>Date</th><th>Score</th><th>Fault</th><th>Sight as good as</th></tr>
     ${historyOutput}
   `;
 
@@ -213,7 +226,8 @@ function newShade(){
         historyData = {
             "score": score,
             "fault": fault,
-            "rank": HTMLranks[difInc].innerHTML
+            "rank": HTMLranks[difInc].innerHTML,
+            "date": getDate()
           };
 
         showHistory(historyData);
@@ -251,7 +265,8 @@ function newShade(){
         historyData = {
           "score": score,
           "fault": fault,
-          "rank": HTMLranks[difInc].innerHTML
+          "rank": HTMLranks[difInc].innerHTML,
+          "date": getDate()
         };
 
         showHistory(historyData);
@@ -290,7 +305,8 @@ function newShade(){
         historyData = {
           "score": score,
           "fault": fault,
-          "rank": HTMLranks[difInc].innerHTML
+          "rank": HTMLranks[difInc].innerHTML,
+          "date": getDate()
         };
 
         showHistory(historyData);
