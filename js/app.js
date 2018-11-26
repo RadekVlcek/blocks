@@ -1,4 +1,4 @@
-window.onload = init;
+window.onload = start;
 
 HTMLtarget = document.getElementById('target');
 HTMLhistory = document.getElementById('history');
@@ -13,52 +13,52 @@ HTMLranks = document.getElementsByClassName('rank-role')
 HTMLscoreHistory = document.getElementById('score-history');
 HTMLquotes = document.getElementById('quotes');
 HTMLquestion = document.getElementById('question');
+HTMLstartButton = document.getElementById('start-button');
 
 // Initial Score / Fault
-var score = 0,
-    fault = 0;
+score = 0, fault = 0;
 
-var topScore = 25;
+topScore = 25;
 
 // Power to increase number of blocks
-var powerBy = 2;
+powerBy = 2;
 
 // Default Dimensions (width,height) which later change
-var defDimen = 150;
+defDimen = 150;
 
 // To define that blocks count needs to increase every 2 times (after 3 times in the beginning)
-var blocksIncrease = 4;
+blocksIncrease = 4;
 
 // Default timer duration (Changes depending on difficulty)
-var timer = 800;
+timer = 800;
 
 // Time until clearInterval
-var newTime = 15;
+newTime = 15;
 
 // Controller for color generating
-var genCon = Math.floor(Math.random() * (0, 30));
+genCon = Math.floor(Math.random() * (0, 30));
 
 // How much to add to trans variable (for transparecny)
-var multipliColorBy = [0.15, 0.085, 0.06, 0.05, 0.04];
+multipliColorBy = [0.15, 0.085, 0.06, 0.05, 0.04];
 
 // Initial - Incrementing difficulty in init() function
-var difInc = 0;
+difInc = 0;
 
 // Initial - Difficulty is depending on the value of multipliColorBy
-var difficulty = multipliColorBy[difInc];
+difficulty = multipliColorBy[difInc];
 
 // Value used to increase width of progress bar
-var levelIncrease = 100/topScore;
+levelIncrease = 100/topScore;
 
 // To store gaming data in local storage
-var historyData = {};
+historyData = {};
 
 /**
  * 30 static colors to be generated.
  * Only rgb is being used, names are for my referrence.
  * Source: http://www.tayloredmktg.com/rgb/#OR
  */
-var shadesToGenerate = [
+shadesToGenerate = [
   { name: 'Hot Pink', rgb: '255,105,180'},
   { name: 'Medium Aquamarine', rgb: '102,205,170'},
   { name: 'Medium Slate Blue', rgb: '123,104,238'},
@@ -92,7 +92,7 @@ var shadesToGenerate = [
 ];
 
 // Quotes to print randomly
-var quotes = [
+quotes = [
   { text: 'Failure will never overtake me if my determination to succeed is strong enough', by: 'Og Mandino' },
   { text: 'Failure is the key to success; each mistake teaches us something.', by: 'Morihei Ueshiba' },
   { text: 'Success consists of going from failure to failure without loss of enthusiasm.', by: 'Winston Churchill' },
@@ -103,9 +103,9 @@ var quotes = [
 ]
 
 // Create an empty array in Local Storage if none exists
-// This should be a part of "Play" button function
-if(localStorage.getItem('history') === null)
+if(localStorage.getItem('history') === null){
   localStorage.setItem('history', '[]');
+}
 
 // Store history data
 function storeHistory(){
@@ -129,34 +129,37 @@ function getDate(){
   return `${d}.${m+1}.${y}`;
 }
 
-function showHistory(data){
-  console.log(data);
-  
+function showHistory(data){  
   HTMLquestion.style.visibility = 'hidden';
   HTMLtarget.style.display = 'none';
   HTMLhistory.style.display = 'block';
 
   // Load score history
   var storeHistory = JSON.parse(localStorage.getItem('history'));
-  const historyAmount = storeHistory.length;
-  storeHistory.push(data);
+  storeHistory.unshift(data);
+  
+  // If 5 records already exist, remove the last one
+  if(storeHistory.length > 5)
+    storeHistory.pop();
+  
   localStorage.setItem('history', JSON.stringify(storeHistory));
+  var historyOutput = '';
 
-  var historyOutput;
-  for(let hC=0 ; hC<=historyAmount ; hC++){
+  for(let hC=0 ; hC<storeHistory.length ; hC++){
     historyOutput += `
     <tr>
-      <td>${JSON.parse(localStorage.getItem('history'))[hC].date}</td>
-      <td>${JSON.parse(localStorage.getItem('history'))[hC].score}</td>
-      <td>${JSON.parse(localStorage.getItem('history'))[hC].fault}</td>
-      <td>${JSON.parse(localStorage.getItem('history'))[hC].rank}</td>
+    <td>${hC+1}</td>
+    <td>${JSON.parse(localStorage.getItem('history'))[hC].date}</td>
+    <td>${JSON.parse(localStorage.getItem('history'))[hC].score}</td>
+    <td>${JSON.parse(localStorage.getItem('history'))[hC].fault}</td>
+    <td>${JSON.parse(localStorage.getItem('history'))[hC].rank}</td>
     </tr>
     `;
   }
 
   // Finally print history table
   HTMLscoreHistory.innerHTML = `
-    <tr><th>Date</th><th>Score</th><th>Fault</th><th>Sight as good as</th></tr>
+    <tr><th>#</th><th>Date</th><th>Score</th><th>Fault</th><th>Sight as good as</th></tr>
     ${historyOutput}
   `;
 
@@ -277,7 +280,7 @@ function newShade(){
         clearInterval(newInt);
         if(newTime == 14) newTime += 1;
         if(newTime < 14) newTime += 2;
-        init();
+        start();
       }
 
     }
@@ -295,8 +298,6 @@ function newShade(){
       }, 400);
 
       if (fault == 5){
-        HTMLtarget.innerHTML = `<h1 style="color: red;">You failed too many times!</h1>`;
-
         HTMLscore.innerHTML = `<h4>Score: <span class="score-fault-output">${score}</span>/25</h4>`;
         HTMLfault.innerHTML = `<h4>Fault: <span class="score-fault-output">${fault}</span>/5</h4>`;
 
@@ -315,8 +316,7 @@ function newShade(){
     HTMLfault.innerHTML = `<h4>Fault: <span class="score-fault-output">${fault}</span>/5</h4>`;
   }
   
-  function init(){
-
+  function start(){
     // Check if time is above 5 again
     if(newTime > 5){
       HTMLtime.style.border = '2px solid #26a65b';
@@ -346,7 +346,6 @@ function newShade(){
     newShade();
 
     let arr = [];
-
     let output = '';
 
     // Generating special var each round (after clicking listItem / after reloading page)
@@ -354,7 +353,6 @@ function newShade(){
 
     // Filling arr with objects and saving listItems to output
     for(let x=0 ; x<blocksCount ; x++){
-
       if(x == special)
         arr.push({ id: x, color: shadesToUse[0] });
 
@@ -362,7 +360,6 @@ function newShade(){
         arr.push({ id: x, color: shadesToUse[1] });
 
       output += `<li><div class="block" onclick=decide(this.id) id="${x}"></div></li>`;
-
     }
 
     // Change width of a block depending on blocksCount
