@@ -1,4 +1,4 @@
-window.onload = start;
+window.onload = init;
 
 HTMLtarget = document.getElementById('target');
 HTMLhistory = document.getElementById('history');
@@ -15,97 +15,110 @@ HTMLquotes = document.getElementById('quotes');
 HTMLquestion = document.getElementById('question');
 HTMLstartButton = document.getElementById('start-button');
 
-// Initial Score / Fault
-score = 0, fault = 0;
+function init(){
 
-topScore = 25;
+  // Initial Score / Fault
+  score = 0, fault = 0;
 
-// Power to increase number of blocks
-powerBy = 2;
+  topScore = 25;
 
-// Default Dimensions (width,height) which later change
-defDimen = 150;
+  // Power to increase number of blocks
+  powerBy = 2;
 
-// To define that blocks count needs to increase every 2 times (after 3 times in the beginning)
-blocksIncrease = 4;
+  // Default Dimensions (width,height) which later change
+  defDimen = 150;
 
-// Default timer duration (Changes depending on difficulty)
-timer = 800;
+  // To define that blocks count needs to increase every 5 times (if clicked special)
+  blocksIncrease = 4;
 
-// Time until clearInterval
-newTime = 15;
+  // Default timer duration
+  timer = 800;
 
-// Controller for color generating
-genCon = Math.floor(Math.random() * (0, 30));
+  // Time until clearInterval
+  newTime = 15;
 
-// How much to add to trans variable (for transparecny)
-multipliColorBy = [0.15, 0.085, 0.06, 0.05, 0.04];
+  // Controller for color generating
+  genCon = Math.floor(Math.random() * (0, 30));
 
-// Initial - Incrementing difficulty in init() function
-difInc = 0;
+  // How much to add to trans variable (for transparecny)
+  multipliColorBy = [0.15, 0.085, 0.06, 0.05, 0.04];
 
-// Initial - Difficulty is depending on the value of multipliColorBy
-difficulty = multipliColorBy[difInc];
+  // Initial - Incrementing difficulty in init() function
+  difInc = 0;
 
-// Value used to increase width of progress bar
-levelIncrease = 100/topScore;
+  // Initial - Difficulty is depending on the value of multipliColorBy
+  difficulty = multipliColorBy[difInc];
 
-// To store gaming data in local storage
-historyData = {};
+  // Value used to increase width of progress bar
+  levelIncrease = 100/topScore;
 
-/**
- * 30 static colors to be generated.
- * Only rgb is being used, names are for my referrence.
- * Source: http://www.tayloredmktg.com/rgb/#OR
- */
-shadesToGenerate = [
-  { name: 'Hot Pink', rgb: '255,105,180'},
-  { name: 'Medium Aquamarine', rgb: '102,205,170'},
-  { name: 'Medium Slate Blue', rgb: '123,104,238'},
-  { name: 'Peach Puff 3', rgb: '205,175,149'},
-  { name: 'Slate Gray', rgb: '112,138,144'},
-  { name: 'Forest Green', rgb: '34,139,34'},
-  { name: 'Dark Salmon', rgb: '233,150,122'},
-  { name: 'Red', rgb: '255,0,0'},
-  { name: 'Medium Orchid', rgb: '186,85,211'},
-  { name: 'Orange Red', rgb: '255,69,0'},
-  { name: 'Indian Red', rgb: '205,92,92'},
-  { name: 'Dark Goldenrod', rgb: '184,134,11'},
-  { name: 'Light Sea Green', rgb: '32,178,170'},
-  { name: 'Cadet Blue', rgb: '95,158,160'},
-  { name: 'Deep Sky Blue', rgb: '0,191,255'},
-  { name: 'Dark Slate Gray', rgb: '49,79,79'},
-  { name: 'Honeydew 4', rgb: '131,139,131'},
-  { name: 'Misty Rose', rgb: '255,228,225'},
-  { name: 'Dark Olive Green', rgb: '85,107,47'},
-  { name: 'Lime Green', rgb: '50,205,50'},
-  { name: 'Forest Green', rgb: '34,139,34'},
-  { name: 'Dark Khaki', rgb: '189,183,107'},
-  { name: 'Tomato', rgb: '255,99,71'},
-  { name: 'Saddle Brown', rgb: '139,69,19'},
-  { name: 'Peru', rgb: '205,133,63'},
-  { name: 'Sandy Brown', rgb: '244,164,96'},
-  { name: 'Tan', rgb: '210,180,140'},
-  { name: 'Firebrick', rgb: '178,34,34'},
-  { name: 'Brown', rgb: '165,42,42'},
-  { name: 'Goldenrod', rgb: '218,165,32'},
-];
+  // To store gaming data in local storage
+  historyData = {};
 
-// Quotes to print randomly
-quotes = [
-  { text: 'Failure will never overtake me if my determination to succeed is strong enough', by: 'Og Mandino' },
-  { text: 'Failure is the key to success; each mistake teaches us something.', by: 'Morihei Ueshiba' },
-  { text: 'Success consists of going from failure to failure without loss of enthusiasm.', by: 'Winston Churchill' },
-  { text: 'Without failure there is no achievement.', by: 'John C. Maxwell' },
-  { text: 'You have to be able to accept failure to get better.', by: 'LeBron James' },
-  { text: 'If you want to increase your success rate, double your failure rate.', by: 'Thomas J. Watson' },
-  { text: 'If things are not failing, you are not innovating enough.', by: 'Elon Musk' },
-]
+  /**
+   * 30 static colors to be generated.
+   * Only rgb is being used, names are for my referrence.
+   * Source: http://www.tayloredmktg.com/rgb/#OR
+   */
+  shadesToGenerate = [
+    { name: 'Hot Pink', rgb: '255,105,180'},
+    { name: 'Medium Aquamarine', rgb: '102,205,170'},
+    { name: 'Medium Slate Blue', rgb: '123,104,238'},
+    { name: 'Peach Puff 3', rgb: '205,175,149'},
+    { name: 'Slate Gray', rgb: '112,138,144'},
+    { name: 'Forest Green', rgb: '34,139,34'},
+    { name: 'Dark Salmon', rgb: '233,150,122'},
+    { name: 'Red', rgb: '255,0,0'},
+    { name: 'Medium Orchid', rgb: '186,85,211'},
+    { name: 'Orange Red', rgb: '255,69,0'},
+    { name: 'Indian Red', rgb: '205,92,92'},
+    { name: 'Dark Goldenrod', rgb: '184,134,11'},
+    { name: 'Light Sea Green', rgb: '32,178,170'},
+    { name: 'Cadet Blue', rgb: '95,158,160'},
+    { name: 'Deep Sky Blue', rgb: '0,191,255'},
+    { name: 'Dark Slate Gray', rgb: '49,79,79'},
+    { name: 'Honeydew 4', rgb: '131,139,131'},
+    { name: 'Misty Rose', rgb: '255,228,225'},
+    { name: 'Dark Olive Green', rgb: '85,107,47'},
+    { name: 'Lime Green', rgb: '50,205,50'},
+    { name: 'Forest Green', rgb: '34,139,34'},
+    { name: 'Dark Khaki', rgb: '189,183,107'},
+    { name: 'Tomato', rgb: '255,99,71'},
+    { name: 'Saddle Brown', rgb: '139,69,19'},
+    { name: 'Peru', rgb: '205,133,63'},
+    { name: 'Sandy Brown', rgb: '244,164,96'},
+    { name: 'Tan', rgb: '210,180,140'},
+    { name: 'Firebrick', rgb: '178,34,34'},
+    { name: 'Brown', rgb: '165,42,42'},
+    { name: 'Goldenrod', rgb: '218,165,32'},
+  ];
+
+  // Quotes to print randomly
+  quotes = [
+    { text: 'Failure will never overtake me if my determination to succeed is strong enough', by: 'Og Mandino' },
+    { text: 'Failure is the key to success; each mistake teaches us something.', by: 'Morihei Ueshiba' },
+    { text: 'Success consists of going from failure to failure without loss of enthusiasm.', by: 'Winston Churchill' },
+    { text: 'Without failure there is no achievement.', by: 'John C. Maxwell' },
+    { text: 'You have to be able to accept failure to get better.', by: 'LeBron James' },
+    { text: 'If you want to increase your success rate, double your failure rate.', by: 'Thomas J. Watson' },
+    { text: 'If things are not failing, you are not innovating enough.', by: 'Elon Musk' },
+  ]
+}
 
 // Create an empty array in Local Storage if none exists
-if(localStorage.getItem('history') === null){
+if(localStorage.getItem('history') === null)
   localStorage.setItem('history', '[]');
-}
+
+HTMLstartButton.addEventListener('click', function(){
+  this.style.display = 'none';
+  HTMLhistory.style.display = 'none';
+  HTMLtarget.style.display = 'block';
+  HTMLlevels.style.width = '0px';
+  for(let x=4 ; x>=0 ; x--)
+    HTMLranks[x].style.color = 'black';
+  
+  start();
+});
 
 // Store history data
 function storeHistory(){
@@ -115,7 +128,7 @@ function storeHistory(){
     "rank": HTMLranks[difInc].innerHTML,
     "date": getDate()
   };
-  
+
   showHistory(historyData);
 }
 
@@ -129,13 +142,14 @@ function getDate(){
   return `${d}.${m+1}.${y}`;
 }
 
-function showHistory(data){  
-  HTMLquestion.style.visibility = 'hidden';
+function showHistory(data){
+  HTMLstartButton.style.display = 'block';
+  // HTMLquestion.style.visibility = 'hidden';
   HTMLtarget.style.display = 'none';
   HTMLhistory.style.display = 'block';
 
   // Load score history
-  var storeHistory = JSON.parse(localStorage.getItem('history'));
+  let storeHistory = JSON.parse(localStorage.getItem('history'));
   storeHistory.unshift(data);
   
   // If 5 records already exist, remove the last one
@@ -166,6 +180,8 @@ function showHistory(data){
   // Show quote
   let output = Math.floor(Math.random() * 7);
   HTMLquotes.innerHTML = `<p>${quotes[output].text}</p><p>&mdash; ${quotes[output].by}</p>`;
+
+  init();
 }
 
 //  Return difficulty in text
@@ -227,7 +243,7 @@ function newShade(){
   // Run the countdown
   function countDown(){
     HTMLtime.innerHTML = `<span class="timeLeft">${newTime}</span>`;
-    newInt = setInterval(() => {  
+    newInt = setInterval(() => {
       if(newTime < 7){
         HTMLtime.style.border = '2px dotted #e74c3c';
         HTMLtime.style.color = '#e74c3c';
@@ -300,7 +316,8 @@ function newShade(){
       if (fault == 5){
         HTMLscore.innerHTML = `<h4>Score: <span class="score-fault-output">${score}</span>/25</h4>`;
         HTMLfault.innerHTML = `<h4>Fault: <span class="score-fault-output">${fault}</span>/5</h4>`;
-
+        clearInterval(newInt);
+        
         // Store data to historyData array
         storeHistory();
         return;
@@ -317,7 +334,7 @@ function newShade(){
   }
   
   function start(){
-    // Check if time is above 5 again
+    // Check if time is above 5
     if(newTime > 5){
       HTMLtime.style.border = '2px solid #26a65b';
       HTMLtime.style.color = '#26a65b';
