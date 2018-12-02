@@ -112,6 +112,7 @@ function init(){
 // On click Start button
 HTMLstartButton.addEventListener('click', function(){
   this.style.display = 'none';
+  HTMLclearHistory.style.display = 'none';
   HTMLhistory.style.display = 'none';
   HTMLtarget.style.display = 'block';
   HTMLlevels.style.width = '0px';
@@ -165,6 +166,7 @@ function storeHistory(){
 
 function showHistory(data){
   HTMLstartButton.style.display = 'block';
+  HTMLclearHistory.style.display = 'block';
   HTMLtarget.style.display = 'none';
   HTMLhistory.style.display = 'block';
 
