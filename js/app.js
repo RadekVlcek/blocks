@@ -120,12 +120,23 @@ HTMLstartButton.addEventListener('click', function(){
   start();
 });
 
-// Store history data
+function getRankRole(){
+  if(difInc == 0)
+    return 'lil baby';
+
+  if(difInc > 0)
+    return HTMLranks[difInc-1].innerHTML;
+
+  if(score == topScore)
+    return 'hawk';
+}
+
+// Store relevant history data
 function storeHistory(){
   historyData = {
     "score": score,
     "fault": fault,
-    "rank": HTMLranks[difInc].innerHTML,
+    "rank": getRankRole(),
     "date": getDate()
   };
 
@@ -251,7 +262,6 @@ function newShade(){
       
       if(newTime < 1){
         clearInterval(newInt);
-        HTMLtarget.innerHTML = `<h1 style="color: red;">GAME OVER!</h1>`;
 
         // Store data to historyData array
         storeHistory();
@@ -284,12 +294,10 @@ function newShade(){
 
       if (score == topScore){
         clearInterval(newInt);
+        HTMLranks[difInc].style.color = '#e74c3c';
 
         // Store data to historyData array
         storeHistory();
-
-        HTMLranks[difInc].style.color = '#e74c3c';
-        HTMLtarget.innerHTML = `<h1 style="color: red;">You Won!</h1>`;
       }
       
       else {
@@ -298,7 +306,6 @@ function newShade(){
         if(newTime < 14) newTime += 2;
         start();
       }
-
     }
 
     else {
@@ -334,6 +341,8 @@ function newShade(){
   }
   
   function start(){
+console.log(difInc)
+
     // Check if time is above 5
     if(newTime > 5){
       HTMLtime.style.border = '2px solid #26a65b';
@@ -356,7 +365,7 @@ function newShade(){
     if(score == blocksIncrease && powerBy < 6){
         blocksIncrease += 5;
         powerBy++ && difInc++;
-        difficulty = multipliColorBy[difInc];
+        difficulty = multipliColorBy[0];
        }
 
     // Generate a new shade each time the correct shade is clicked
