@@ -14,6 +14,7 @@ HTMLscoreHistory = document.getElementById('score-history');
 HTMLquotes = document.getElementById('quotes');
 HTMLquestion = document.getElementById('question');
 HTMLstartButton = document.getElementById('start-button');
+HTMLclearHistory = document.getElementById('clear-history');
 
 function init(){
 
@@ -103,21 +104,30 @@ function init(){
     { text: 'If you want to increase your success rate, double your failure rate.', by: 'Thomas J. Watson' },
     { text: 'If things are not failing, you are not innovating enough.', by: 'Elon Musk' },
   ]
+
+  if(localStorage.getItem('history') === null)
+  localStorage.setItem('history', '[]');
 }
 
-// Create an empty array in Local Storage if none exists
-if(localStorage.getItem('history') === null)
-  localStorage.setItem('history', '[]');
-
+// On click Start button
 HTMLstartButton.addEventListener('click', function(){
   this.style.display = 'none';
   HTMLhistory.style.display = 'none';
   HTMLtarget.style.display = 'block';
   HTMLlevels.style.width = '0px';
   for(let x=4 ; x>=0 ; x--)
-    HTMLranks[x].style.color = 'black';
+    HTMLranks[x].style.color = '#000000';
   
+  init();
   start();
+});
+
+// On click Clear History button
+HTMLclearHistory.addEventListener('click', function(){
+  let hold = JSON.parse(localStorage.getItem('history'));
+  hold = [];
+  localStorage.setItem('history', JSON.stringify(hold));
+  location.reload();
 });
 
 function getRankRole(){
@@ -129,6 +139,16 @@ function getRankRole(){
 
   if(score == topScore)
     return 'hawk';
+}
+
+// Get current date
+function getDate(){
+  let date = new Date();
+  let d = date.getDate();
+  let m = date.getMonth();
+  let y = date.getFullYear();
+
+  return `${d}.${m+1}.${y}`;
 }
 
 // Store relevant history data
@@ -143,19 +163,8 @@ function storeHistory(){
   showHistory(historyData);
 }
 
-// Get current date
-function getDate(){
-  let date = new Date();
-  let d = date.getDate();
-  let m = date.getMonth();
-  let y = date.getFullYear();
-
-  return `${d}.${m+1}.${y}`;
-}
-
 function showHistory(data){
   HTMLstartButton.style.display = 'block';
-  // HTMLquestion.style.visibility = 'hidden';
   HTMLtarget.style.display = 'none';
   HTMLhistory.style.display = 'block';
 
@@ -168,8 +177,8 @@ function showHistory(data){
     storeHistory.pop();
   
   localStorage.setItem('history', JSON.stringify(storeHistory));
+  
   var historyOutput = '';
-
   for(let hC=0 ; hC<storeHistory.length ; hC++){
     historyOutput += `
     <tr>
@@ -191,8 +200,6 @@ function showHistory(data){
   // Show quote
   let output = Math.floor(Math.random() * 7);
   HTMLquotes.innerHTML = `<p>${quotes[output].text}</p><p>&mdash; ${quotes[output].by}</p>`;
-
-  init();
 }
 
 //  Return difficulty in text
@@ -293,6 +300,13 @@ function newShade(){
       }, 400);
 
       if (score == topScore){
+        console.log(`
+          score: ${score}
+          fault: ${fault}
+        `);
+        HTMLscore.innerHTML = `<h4>Score: <span class="score-fault-output">${score}</span>/25</h4>`;
+        HTMLfault.innerHTML = `<h4>Fault: <span class="score-fault-output">${fault}</span>/5</h4>`;
+        
         clearInterval(newInt);
         HTMLranks[difInc].style.color = '#e74c3c';
 
@@ -341,9 +355,6 @@ function newShade(){
   }
   
   function start(){
-console.log(difInc)
-
-    // Check if time is above 5
     if(newTime > 5){
       HTMLtime.style.border = '2px solid #26a65b';
       HTMLtime.style.color = '#26a65b';
@@ -366,6 +377,7 @@ console.log(difInc)
         blocksIncrease += 5;
         powerBy++ && difInc++;
         difficulty = multipliColorBy[0];
+        // timer -= 25;
        }
 
     // Generate a new shade each time the correct shade is clicked

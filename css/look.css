@@ -11,7 +11,6 @@ body {
     width: 84%;
     text-align: center;
     margin: 10px 0px 0px 0px;
-    /* box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.14); */
     padding-right: 0px;
 }
 
@@ -85,7 +84,7 @@ ul#target li div {
     margin:10px auto;
 	text-decoration:none;
     text-shadow:0px 1px 0px #854629;
-    /* display: none; */
+    display: block;
 }
 
 #start-button:hover {
@@ -192,7 +191,6 @@ ul#ranks-wrapper li p {
     font-size: 30px;
     font-weight: bold;
     color: #26a65b;
-    border: 2px solid #26a65b; 
     width: 45px;
     text-align: center;
     border-radius: 50%;
@@ -248,6 +246,15 @@ ul#ranks-wrapper li p {
 #details {
     vertical-align: top;
     margin: 30px 0px 0px 20px;
+}
+
+#stats {
+    margin-top: 20px;
+}
+
+#stats h4 {
+    /* margin: 20px 0px 0px 0px; */
+    line-height: 30px;
 }
 
 /* Layout styling */
