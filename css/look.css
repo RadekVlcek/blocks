@@ -223,8 +223,16 @@ ul#ranks-wrapper li p {
     margin-left: 12px;
 }
 
+#score {
+    transition: color .15s;
+}
+
 #score, #scorePlus {
     display: inline-block;
+}
+
+#fault {
+    transition: color .15s;
 }
 
 #fault, #faultPlus {
@@ -316,7 +324,7 @@ ul#ranks-wrapper li p {
     /* width: 10px; */
     position: relative;
     right: 29px;
-    top: 14px;
+    top: 15px;
     transition: opacity .1s;
 }
 
@@ -326,4 +334,20 @@ ul#ranks-wrapper li p {
 
 tr:nth-of-type(2){
     transition: background-color .5s, color .5s;
+}
+
+#ok {
+    max-width: 100%;
+    margin: 100px auto;
+    text-align: center;
+    display: none;
+}
+
+@media(max-width: 800px){
+    #big-boss { display: none; }
+    #footer { display: none; }
+
+    #ok {
+        display: block;
+    }
 }

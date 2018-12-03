@@ -1,17 +1,14 @@
 window.onload = loadGame;
 
 HTMLtarget = document.getElementById('target');
-
 HTMLhistory = document.getElementById('history');
 HTMLscoreHistory = document.getElementById('score-history');
 HTMLnoHistory = document.getElementById('no-history');
 HTMLclearHistory = document.getElementById('clear-history');
-
 HTMLscore = document.getElementById('score');
 HTMLfault = document.getElementById('fault');
 HTMLscorePlus = document.getElementById('scorePlus');
 HTMLfaultPlus = document.getElementById('faultPlus');
-
 HTMLtime = document.getElementById('time');
 HTMLdifficulty = document.getElementById('diff');
 HTMLlevelsWrapper = document.getElementById('levels-wrapper');
@@ -239,7 +236,7 @@ function showHistory(data){
 
   // Finally print history table
   HTMLscoreHistory.innerHTML = `
-    <tr><th>#</th><th>Date</th><th>Score</th><th>Fault</th><th>Sight as good as</th></tr>
+    <tr><th>#</th><th>Time</th><th>Score</th><th>Fault</th><th>Sight as good as</th></tr>
     ${historyOutput}
   `;
 
@@ -310,97 +307,106 @@ function newShade(){
     newShade();
 }
   
-  // Run the countdown
-  function countDown(){
-    HTMLtime.innerHTML = `<span class="timeLeft">${newTime}</span>`;
-    newInt = setInterval(() => {
-      if(newTime < 7){
-        HTMLtime.style.border = '2px dotted #e74c3c';
-        HTMLtime.style.color = '#e74c3c';
-      }
-      
-      if(newTime < 1){
-        clearInterval(newInt);
+// Run the countdown
+function countDown(){
+HTMLtime.innerHTML = `<span class="timeLeft">${newTime}</span>`;
+newInt = setInterval(() => {
+  if(newTime < 7){
+    HTMLtime.style.border = '2px dotted #e74c3c';
+    HTMLtime.style.color = '#e74c3c';
+  }
+  
+  if(newTime < 1){
+    clearInterval(newInt);
 
-        // Store data to historyData array
-        storeHistory();
-      }
-
-      else {
-        newTime--;
-        HTMLtime.innerHTML = `<span class="timeLeft">${newTime}</span>`;
-      }
-
-    }, timer);
+    // Store data to historyData array
+    storeHistory();
   }
 
-  // Decide whether clicked on special or not
-  function decide(id){
-    if(id == special){
-      score++;
+  else {
+    newTime--;
+    HTMLtime.innerHTML = `<span class="timeLeft">${newTime}</span>`;
+  }
 
-      // Increasing width of progress bar
-      HTMLlevels.style.width = `${levelIncrease}%`;
-      levelIncrease += 100/topScore;
+}, timer);
+}
 
-      // Animating +1
-      HTMLscorePlus.style.opacity = '1';
-      HTMLscorePlus.style.transform = 'translate(15px)';
-      setTimeout(function(){
-        HTMLscorePlus.style.opacity = '0';
-        HTMLscorePlus.style.transform = 'translate(-15px)';
-      }, 400);
+// Decide whether clicked on special or not
+function decide(id){
+if(id == special){
+  score++;
 
-      if (score == topScore){
-        console.log(`
-          score: ${score}
-          fault: ${fault}
-        `);
-        HTMLscore.innerHTML = `<h4>Score: <span class="score-fault-output">${score}</span>/25</h4>`;
-        HTMLfault.innerHTML = `<h4>Fault: <span class="score-fault-output">${fault}</span>/5</h4>`;
-        
-        clearInterval(newInt);
-        HTMLranks[difInc].style.color = '#e74c3c';
+  // Increasing width of progress bar
+  HTMLlevels.style.width = `${levelIncrease}%`;
+  levelIncrease += 100/topScore;
 
-        // Store data to historyData array
-        storeHistory();
-      }
-      
-      else {
-        clearInterval(newInt);
-        if(newTime == 14) newTime += 1;
-        if(newTime < 14) newTime += 2;
-        start();
-      }
-    }
+  // Animating +1
+  HTMLscorePlus.style.opacity = '1';
+  HTMLscorePlus.style.transform = 'translate(15px)';
+  setTimeout(function(){
+    HTMLscorePlus.style.opacity = '0';
+    HTMLscorePlus.style.transform = 'translate(-15px)';
+  }, 400);
 
-    else {
-      fault++;
-      clearInterval(newInt);
-      
-      // Animating +1
-      HTMLfaultPlus.style.opacity = '1';
-      HTMLfaultPlus.style.transform = 'translate(15px)';
-      setTimeout(function(){
-        HTMLfaultPlus.style.opacity = '0';
-        HTMLfaultPlus.style.transform = 'translate(-15px)';
-      }, 400);
+  if (score == topScore){
+    console.log(`
+      score: ${score}
+      fault: ${fault}
+    `);
+    HTMLscore.innerHTML = `<h4>Score: <span class="score-fault-output">${score}</span>/25</h4>`;
+    HTMLfault.innerHTML = `<h4>Fault: <span class="score-fault-output">${fault}</span>/5</h4>`;
+    HTMLscore.style.color = '#26a65b';
+    setInterval(function(){
+      HTMLscore.style.color = 'black';
+    }, 2000);
 
-      if (fault == 5){
-        HTMLscore.innerHTML = `<h4>Score: <span class="score-fault-output">${score}</span>/25</h4>`;
-        HTMLfault.innerHTML = `<h4>Fault: <span class="score-fault-output">${fault}</span>/5</h4>`;
-        clearInterval(newInt);
-        
-        // Store data to historyData array
-        storeHistory();
-        return;
-      }
-      
-      if(newTime == 1) newTime -= 1;
-      if(newTime > 1) newTime -= 2;
+    clearInterval(newInt);
+    HTMLranks[difInc].style.color = '#e74c3c';
 
-      countDown();
-    }
+    // Store data to historyData array
+    storeHistory();
+  }
+  
+  else {
+    clearInterval(newInt);
+    if(newTime == 14) newTime += 1;
+    if(newTime < 14) newTime += 2;
+    start();
+  }
+}
+
+else {
+  fault++;
+  clearInterval(newInt);
+  
+  // Animating +1
+  HTMLfaultPlus.style.opacity = '1';
+  HTMLfaultPlus.style.transform = 'translate(15px)';
+  setTimeout(function(){
+    HTMLfaultPlus.style.opacity = '0';
+    HTMLfaultPlus.style.transform = 'translate(-15px)';
+  }, 400);
+
+  if (fault == 5){
+    HTMLscore.innerHTML = `<h4>Score: <span class="score-fault-output">${score}</span>/25</h4>`;
+    HTMLfault.innerHTML = `<h4>Fault: <span class="score-fault-output">${fault}</span>/5</h4>`;
+    HTMLfault.style.color = '#e74c3c';
+    setInterval(function(){
+      HTMLfault.style.color = 'black';
+    }, 1100);
+
+    clearInterval(newInt);
+    
+    // Store data to historyData array
+    storeHistory();
+    return;
+  }
+  
+  if(newTime == 1) newTime -= 1;
+  if(newTime > 1) newTime -= 2;
+
+  countDown();
+}
     
     HTMLscore.innerHTML = `<h4>Score: <span class="score-fault-output">${score}</span>/25</h4>`;
     HTMLfault.innerHTML = `<h4>Fault: <span class="score-fault-output">${fault}</span>/5</h4>`;
@@ -429,7 +435,6 @@ function newShade(){
         blocksIncrease += 5;
         powerBy++ && difInc++;
         difficulty = multipliColorBy[difInc];
-        // timer -= 25;
        }
 
     // Generate a new shade each time the correct shade is clicked
