@@ -1,26 +1,70 @@
-window.onload = init;
+window.onload = loadGame;
 
 HTMLtarget = document.getElementById('target');
+
 HTMLhistory = document.getElementById('history');
+HTMLscoreHistory = document.getElementById('score-history');
+HTMLnoHistory = document.getElementById('no-history');
+HTMLclearHistory = document.getElementById('clear-history');
+
 HTMLscore = document.getElementById('score');
 HTMLfault = document.getElementById('fault');
 HTMLscorePlus = document.getElementById('scorePlus');
 HTMLfaultPlus = document.getElementById('faultPlus');
+
 HTMLtime = document.getElementById('time');
 HTMLdifficulty = document.getElementById('diff');
+HTMLlevelsWrapper = document.getElementById('levels-wrapper');
 HTMLlevels = document.getElementById('levels-bar');
 HTMLranks = document.getElementsByClassName('rank-role')
-HTMLscoreHistory = document.getElementById('score-history');
 HTMLquotes = document.getElementById('quotes');
 HTMLquestion = document.getElementById('question');
 HTMLstartButton = document.getElementById('start-button');
-HTMLclearHistory = document.getElementById('clear-history');
+
+function loadGame(){
+  var historyData = localStorage.getItem('history');
+
+  if(historyData == '[]')
+    HTMLnoHistory.style.display = 'block';
+
+  else {
+    HTMLnoHistory.style.display = 'none';
+    HTMLclearHistory.style.display = 'block';
+
+    // Fetch & print current history data
+    let tempStoreHistory = JSON.parse(historyData);
+    var historyOutput = '';
+    for(let hC=0 ; hC<tempStoreHistory.length ; hC++){
+      historyOutput += `
+      <tr>
+      <td>${hC+1}</td>
+      <td>${JSON.parse(localStorage.getItem('history'))[hC].date}</td>
+      <td>${JSON.parse(localStorage.getItem('history'))[hC].score}</td>
+      <td>${JSON.parse(localStorage.getItem('history'))[hC].fault}</td>
+      <td>${JSON.parse(localStorage.getItem('history'))[hC].rank}</td>
+      </tr>
+      `;
+    }
+
+    // Finally print history table
+    HTMLscoreHistory.innerHTML = `
+      <tr><th>#</th><th>Date</th><th>Score</th><th>Fault</th><th>Sight as good as</th></tr>
+      ${historyOutput}
+    `;
+
+    HTMLhistory.style.display = 'block';
+  }
+}
 
 function init(){
+  // Hide no history message
+  if(HTMLnoHistory.style.display == 'block')
+    HTMLnoHistory.style.display = 'none';
 
   // Initial Score / Fault
   score = 0, fault = 0;
 
+  // Top score
   topScore = 25;
 
   // Power to increase number of blocks
@@ -104,9 +148,6 @@ function init(){
     { text: 'If you want to increase your success rate, double your failure rate.', by: 'Thomas J. Watson' },
     { text: 'If things are not failing, you are not innovating enough.', by: 'Elon Musk' },
   ]
-
-  if(localStorage.getItem('history') === null)
-  localStorage.setItem('history', '[]');
 }
 
 // On click Start button
@@ -143,13 +184,16 @@ function getRankRole(){
 }
 
 // Get current date
-function getDate(){
-  let date = new Date();
-  let d = date.getDate();
-  let m = date.getMonth();
-  let y = date.getFullYear();
+function getTime(){
+  let d = new Date();
+  var h = d.getHours();
+  var m = d.getMinutes();
+  var s = d.getSeconds();
 
-  return `${d}.${m+1}.${y}`;
+  if(s < 10) s = `0${s}`;
+  if(m < 10) m = `0${m}`;
+
+  return `${h}:${m}:${s}`;
 }
 
 // Store relevant history data
@@ -158,7 +202,7 @@ function storeHistory(){
     "score": score,
     "fault": fault,
     "rank": getRankRole(),
-    "date": getDate()
+    "date": getTime()
   };
 
   showHistory(historyData);
@@ -171,17 +215,17 @@ function showHistory(data){
   HTMLhistory.style.display = 'block';
 
   // Load score history
-  let storeHistory = JSON.parse(localStorage.getItem('history'));
-  storeHistory.unshift(data);
+  let tempStoreHistory = JSON.parse(localStorage.getItem('history'));
+  tempStoreHistory.unshift(data);
   
   // If 5 records already exist, remove the last one
-  if(storeHistory.length > 5)
-    storeHistory.pop();
+  if(tempStoreHistory.length > 5)
+  tempStoreHistory.pop();
   
-  localStorage.setItem('history', JSON.stringify(storeHistory));
+  localStorage.setItem('history', JSON.stringify(tempStoreHistory));
   
   var historyOutput = '';
-  for(let hC=0 ; hC<storeHistory.length ; hC++){
+  for(let hC=0 ; hC<tempStoreHistory.length ; hC++){
     historyOutput += `
     <tr>
     <td>${hC+1}</td>
@@ -199,6 +243,12 @@ function showHistory(data){
     ${historyOutput}
   `;
 
+  var newTr = document.getElementsByTagName('tr')[1];
+  newTr.style.backgroundColor = '#ddd';
+  setInterval(function(){
+    newTr.style.backgroundColor = '#ffffff';
+  }, 800);
+  
   // Show quote
   let output = Math.floor(Math.random() * 7);
   HTMLquotes.innerHTML = `<p>${quotes[output].text}</p><p>&mdash; ${quotes[output].by}</p>`;
@@ -378,7 +428,7 @@ function newShade(){
     if(score == blocksIncrease && powerBy < 6){
         blocksIncrease += 5;
         powerBy++ && difInc++;
-        difficulty = multipliColorBy[0];
+        difficulty = multipliColorBy[difInc];
         // timer -= 25;
        }
 

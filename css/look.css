@@ -94,7 +94,6 @@ ul#target li div {
     padding:8px 26px;
     margin:10px auto;
 	text-decoration:none;
-    text-shadow:0px 1px 0px #854629;
     display: block;
 }
 
@@ -122,6 +121,15 @@ ul#target li div {
     font-size: 12px;
     margin: -7px auto;
     text-align: center;
+    display: none;
+}
+
+#no-history {
+    display: none;
+    text-align: center;
+    padding: 0;
+    margin-top: 45px;
+    opacity: .18;
 }
 
 #history {
@@ -131,7 +139,7 @@ ul#target li div {
 }
 
 #history #quotes {    
-    font-size: 14px;
+    font-size: 13px;
     padding: 0px 25px 0px 25px;
 }
 
@@ -151,6 +159,7 @@ ul#target li div {
     margin: 1% 0px 0px 50px;
     width: 70%;
     background: #fff;
+    /* visibility: hidden; */
 }
 
 #levels-bar {
@@ -239,6 +248,7 @@ ul#ranks-wrapper li p {
     line-height: 15px;
     vertical-align: top;
     margin-top: 52px;
+    /* visibility: hidden; */
 }
 
 #q-line-height {
@@ -290,23 +300,30 @@ ul#ranks-wrapper li p {
     position: absolute;
     bottom: 0;
     width: 100%;
+    margin-bottom: 10px;
     text-align: center;
-    opacity: 0.9;
+    opacity: 0.8;
     line-height: 0px;
 }
 
 #footer p, #footer a {
     display: inline-block;
-    vertical-align: middle;
+    /* vertical-align: middle; */
 }
 
 #github-link {
     opacity: 0.8;
-    width: 81px;
+    /* width: 10px; */
     position: relative;
     right: 29px;
+    top: 14px;
+    transition: opacity .1s;
 }
 
 #github-link:hover {
     opacity: 0.5;
+}
+
+tr:nth-of-type(2){
+    transition: background-color .5s, color .5s;
 }
