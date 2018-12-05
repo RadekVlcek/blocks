@@ -1,4 +1,4 @@
-window.onload = loadGame;
+window.onload = init;
 
 HTMLtarget = document.getElementById('target');
 HTMLhistory = document.getElementById('history');
@@ -18,11 +18,7 @@ HTMLquotes = document.getElementById('quotes');
 HTMLquestion = document.getElementById('question');
 HTMLstartButton = document.getElementById('start-button');
 
-function init(){
-  // Hide no history message
-  if(HTMLnoHistory.style.display == 'block')
-    HTMLnoHistory.style.display = 'none';
-
+function loadGame(){
   // Initial Score / Fault
   score = 0, fault = 0;
 
@@ -62,9 +58,14 @@ function init(){
   // To store gaming data in local storage
   historyData = {};
 
+  // Instances for audio files
   playScore = new Audio('/audio/score.mp3');
   playFault = new Audio('/audio/fault.mp3');
   playTimer = new Audio('/audio/timer.mp3');
+
+  // Hide "no history available" message
+  if(HTMLnoHistory.style.display == 'block')
+    HTMLnoHistory.style.display = 'none';
 
   /**
    * 30 static colors to be generated.
@@ -116,41 +117,59 @@ function init(){
   ]
 }
 
-function loadGame(){
-  var historyData = localStorage.getItem('history');
-
-  if(historyData === null)
-    localStorage.setItem('history', '[]');
-
-  if(historyData == '[]')
-    HTMLnoHistory.style.display = 'block';
+function init(){
+  // Check for web browser
+  let b = navigator.userAgent;
+  let isIE = b.indexOf('MSIE ') > -1 || b.indexOf('Trident/') > -1;
+  if(isIE){
+    document.getElementById('big-boss').style.display = 'none';
+    document.getElementById('ok').style.display = 'none';
+    document.getElementById('footer').style.display = 'none';
+    document.getElementById('ie').style.display = 'block';
+  }
 
   else {
-    HTMLnoHistory.style.display = 'none';
-    HTMLclearHistory.style.display = 'block';
+    // Animate question and ranks
+    HTMLlevelsWrapper.style.opacity = 1;
+    HTMLlevelsWrapper.style.transform = 'translate(0px, 0px)';
+    HTMLquestion.style.opacity = 1;
+    HTMLquestion.style.transform = 'translateX(0px)';
 
-    // Fetch & print current history data
-    let tempStoreHistory = JSON.parse(historyData);
-    var historyOutput = '';
-    for(let hC=0 ; hC<tempStoreHistory.length ; hC++){
-      historyOutput += `
-      <tr>
-      <td>${hC+1}</td>
-      <td>${JSON.parse(localStorage.getItem('history'))[hC].score}</td>
-      <td>${JSON.parse(localStorage.getItem('history'))[hC].fault}</td>
-      <td>${JSON.parse(localStorage.getItem('history'))[hC].time}</td>
-      <td>${JSON.parse(localStorage.getItem('history'))[hC].rank}</td>
-      </tr>
+    var historyData = localStorage.getItem('history');
+
+    if(historyData === null)
+      localStorage.setItem('history', '[]');
+
+    if(historyData == '[]')
+      HTMLnoHistory.style.display = 'block';
+
+    else {
+      HTMLnoHistory.style.display = 'none';
+      HTMLclearHistory.style.display = 'block';
+
+      // Fetch & print current history data
+      let tempStoreHistory = JSON.parse(historyData);
+      var historyOutput = '';
+      for(let hC=0 ; hC<tempStoreHistory.length ; hC++){
+        historyOutput += `
+        <tr>
+        <td>${hC+1}</td>
+        <td>${JSON.parse(localStorage.getItem('history'))[hC].score}</td>
+        <td>${JSON.parse(localStorage.getItem('history'))[hC].fault}</td>
+        <td>${JSON.parse(localStorage.getItem('history'))[hC].time}</td>
+        <td>${JSON.parse(localStorage.getItem('history'))[hC].rank}</td>
+        </tr>
+        `;
+      }
+
+      // Finally print history table
+      HTMLscoreHistory.innerHTML = `
+        <tr><th>#</th><th>Score</th><th>Fault</th><th>Seconds left</th><th>Sight as good as</th></tr>
+        ${historyOutput}
       `;
+
+      HTMLhistory.style.display = 'block';
     }
-
-    // Finally print history table
-    HTMLscoreHistory.innerHTML = `
-      <tr><th>#</th><th>Score</th><th>Fault</th><th>Seconds left</th><th>Sight as good as</th></tr>
-      ${historyOutput}
-    `;
-
-    HTMLhistory.style.display = 'block';
   }
 }
 
@@ -164,7 +183,7 @@ HTMLstartButton.addEventListener('click', function(){
   for(let x=4 ; x>=0 ; x--)
     HTMLranks[x].style.color = '#000000';
   
-  init();
+  loadGame();
   start();
 });
 
@@ -424,9 +443,8 @@ function start(){
 
   if(score > blocksIncrease && powerBy < 6){
     blocksIncrease += 5;
-    powerBy++;
-    difInc++;
-    difficulty = multipliColorBy[0];
+    powerBy++ && difInc++;
+    difficulty = multipliColorBy[difInc];
   }
 
   

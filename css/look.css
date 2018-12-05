@@ -160,7 +160,9 @@ ul#target li div {
     margin: 1% 0px 0px 50px;
     width: 70%;
     background: #fff;
-    /* visibility: hidden; */
+    opacity: 0;
+    transform: translate(0px, 50px);
+    transition: opacity .5s, transform .5s;
 }
 
 #levels-bar {
@@ -257,7 +259,9 @@ ul#ranks-wrapper li p {
     line-height: 15px;
     vertical-align: top;
     margin-top: 52px;
-    /* visibility: hidden; */
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: opacity .5s, transform .5s;
 }
 
 #q-line-height {
@@ -282,6 +286,7 @@ ul#ranks-wrapper li p {
 #details {
     vertical-align: top;
     margin: 30px 0px 0px 20px;
+    /* visibility: hidden; */
 }
 
 #stats {
@@ -337,7 +342,7 @@ tr:nth-of-type(2){
     transition: background-color .5s, color .5s;
 }
 
-#ok {
+#ok, #ie {
     max-width: 100%;
     margin: 100px auto;
     text-align: center;
