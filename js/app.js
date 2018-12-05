@@ -18,41 +18,6 @@ HTMLquotes = document.getElementById('quotes');
 HTMLquestion = document.getElementById('question');
 HTMLstartButton = document.getElementById('start-button');
 
-function loadGame(){
-  var historyData = localStorage.getItem('history');
-
-  if(historyData == '[]')
-    HTMLnoHistory.style.display = 'block';
-
-  else {
-    HTMLnoHistory.style.display = 'none';
-    HTMLclearHistory.style.display = 'block';
-
-    // Fetch & print current history data
-    let tempStoreHistory = JSON.parse(historyData);
-    var historyOutput = '';
-    for(let hC=0 ; hC<tempStoreHistory.length ; hC++){
-      historyOutput += `
-      <tr>
-      <td>${hC+1}</td>
-      <td>${JSON.parse(localStorage.getItem('history'))[hC].date}</td>
-      <td>${JSON.parse(localStorage.getItem('history'))[hC].score}</td>
-      <td>${JSON.parse(localStorage.getItem('history'))[hC].fault}</td>
-      <td>${JSON.parse(localStorage.getItem('history'))[hC].rank}</td>
-      </tr>
-      `;
-    }
-
-    // Finally print history table
-    HTMLscoreHistory.innerHTML = `
-      <tr><th>#</th><th>Date</th><th>Score</th><th>Fault</th><th>Sight as good as</th></tr>
-      ${historyOutput}
-    `;
-
-    HTMLhistory.style.display = 'block';
-  }
-}
-
 function init(){
   // Hide no history message
   if(HTMLnoHistory.style.display == 'block')
@@ -147,6 +112,44 @@ function init(){
   ]
 }
 
+function loadGame(){
+  var historyData = localStorage.getItem('history');
+
+  if(historyData === null)
+    localStorage.setItem('history', '[]');
+
+  if(historyData == '[]')
+    HTMLnoHistory.style.display = 'block';
+
+  else {
+    HTMLnoHistory.style.display = 'none';
+    HTMLclearHistory.style.display = 'block';
+
+    // Fetch & print current history data
+    let tempStoreHistory = JSON.parse(historyData);
+    var historyOutput = '';
+    for(let hC=0 ; hC<tempStoreHistory.length ; hC++){
+      historyOutput += `
+      <tr>
+      <td>${hC+1}</td>
+      <td>${JSON.parse(localStorage.getItem('history'))[hC].score}</td>
+      <td>${JSON.parse(localStorage.getItem('history'))[hC].fault}</td>
+      <td>${JSON.parse(localStorage.getItem('history'))[hC].time}</td>
+      <td>${JSON.parse(localStorage.getItem('history'))[hC].rank}</td>
+      </tr>
+      `;
+    }
+
+    // Finally print history table
+    HTMLscoreHistory.innerHTML = `
+      <tr><th>#</th><th>Score</th><th>Fault</th><th>Seconds left</th><th>Sight as good as</th></tr>
+      ${historyOutput}
+    `;
+
+    HTMLhistory.style.display = 'block';
+  }
+}
+
 // On click Start button
 HTMLstartButton.addEventListener('click', function(){
   this.style.display = 'none';
@@ -173,24 +176,11 @@ function getRankRole(){
   if(difInc == 0)
     return 'lil baby';
 
-  if(difInc > 0)
+  if(difInc > 0 && score != topScore)
     return HTMLranks[difInc-1].innerHTML;
 
   if(score == topScore)
     return 'hawk';
-}
-
-// Get current date
-function getTime(){
-  let d = new Date();
-  var h = d.getHours();
-  var m = d.getMinutes();
-  var s = d.getSeconds();
-
-  if(s < 10) s = `0${s}`;
-  if(m < 10) m = `0${m}`;
-
-  return `${h}:${m}:${s}`;
 }
 
 // Store relevant history data
@@ -199,7 +189,7 @@ function storeHistory(){
     "score": score,
     "fault": fault,
     "rank": getRankRole(),
-    "date": getTime()
+    "time": newTime
   };
 
   showHistory(historyData);
@@ -226,9 +216,9 @@ function showHistory(data){
     historyOutput += `
     <tr>
     <td>${hC+1}</td>
-    <td>${JSON.parse(localStorage.getItem('history'))[hC].date}</td>
     <td>${JSON.parse(localStorage.getItem('history'))[hC].score}</td>
     <td>${JSON.parse(localStorage.getItem('history'))[hC].fault}</td>
+    <td>${JSON.parse(localStorage.getItem('history'))[hC].time}</td>
     <td>${JSON.parse(localStorage.getItem('history'))[hC].rank}</td>
     </tr>
     `;
@@ -236,7 +226,7 @@ function showHistory(data){
 
   // Finally print history table
   HTMLscoreHistory.innerHTML = `
-    <tr><th>#</th><th>Time</th><th>Score</th><th>Fault</th><th>Sight as good as</th></tr>
+    <tr><th>#</th><th>Score</th><th>Fault</th><th>Seconds left</th><th>Sight as good as</th></tr>
     ${historyOutput}
   `;
 
@@ -333,8 +323,8 @@ newInt = setInterval(() => {
 
 // Decide whether clicked on special or not
 function decide(id){
-if(id == special){
-  score++;
+  if(id == special){
+    score++;
 
   // Increasing width of progress bar
   HTMLlevels.style.width = `${levelIncrease}%`;
@@ -349,10 +339,6 @@ if(id == special){
   }, 400);
 
   if (score == topScore){
-    console.log(`
-      score: ${score}
-      fault: ${fault}
-    `);
     HTMLscore.innerHTML = `<h4>Score: <span class="score-fault-output">${score}</span>/25</h4>`;
     HTMLfault.innerHTML = `<h4>Fault: <span class="score-fault-output">${fault}</span>/5</h4>`;
     HTMLscore.style.color = '#26a65b';
@@ -363,7 +349,7 @@ if(id == special){
     clearInterval(newInt);
     HTMLranks[difInc].style.color = '#e74c3c';
 
-    // Store data to historyData array
+    // Store data
     storeHistory();
   }
   
@@ -397,7 +383,7 @@ else {
 
     clearInterval(newInt);
     
-    // Store data to historyData array
+    // Store data
     storeHistory();
     return;
   }
@@ -407,75 +393,77 @@ else {
 
   countDown();
 }
-    
-    HTMLscore.innerHTML = `<h4>Score: <span class="score-fault-output">${score}</span>/25</h4>`;
-    HTMLfault.innerHTML = `<h4>Fault: <span class="score-fault-output">${fault}</span>/5</h4>`;
+
+  HTMLscore.innerHTML = `<h4>Score: <span class="score-fault-output">${score}</span>/25</h4>`;
+  HTMLfault.innerHTML = `<h4>Fault: <span class="score-fault-output">${fault}</span>/5</h4>`;
+}
+
+function start(){
+  if(newTime > 5){
+    HTMLtime.style.border = '2px solid #26a65b';
+    HTMLtime.style.color = '#26a65b';
   }
+
+  HTMLscore.innerHTML = `<h4>Score: <span class="score-fault-output">${score}</span>/25</h4>`;
+  HTMLfault.innerHTML = `<h4>Fault: <span class="score-fault-output">${fault}</span>/5</h4>`;
+  HTMLdifficulty.innerHTML = showDifficulty();
+
+  // Start timer
+  countDown();
+
+  // Get amount of blocks depending on powerBy
+  let blocksCount = Math.pow(powerBy, 2);
+
+  if(score > blocksIncrease && powerBy < 6){
+    blocksIncrease += 5;
+    powerBy++;
+    difInc++;
+    difficulty = multipliColorBy[0];
+  }
+
   
-  function start(){
-    if(newTime > 5){
-      HTMLtime.style.border = '2px solid #26a65b';
-      HTMLtime.style.color = '#26a65b';
-    }
+  if(difInc > 0)
+    HTMLranks[difInc-1].style.color = '#e74c3c';
 
-    if(difInc > 0)
-      HTMLranks[difInc-1].style.color = '#e74c3c';
+  // Generate a new shade each time the correct shade is clicked
+  newShade();
 
-    HTMLscore.innerHTML = `<h4>Score: <span class="score-fault-output">${score}</span>/25</h4>`;
-    HTMLfault.innerHTML = `<h4>Fault: <span class="score-fault-output">${fault}</span>/5</h4>`;
-    HTMLdifficulty.innerHTML = showDifficulty();
+  let arr = [];
+  let output = '';
 
-    // Start timer
-    countDown();
+  // Generating special var each round (after clicking listItem / after reloading page)
+  special = Math.floor(Math.random() * blocksCount);
 
-    // Get amount of blocks depending on powerBy
-    let blocksCount = Math.pow(powerBy, 2);
+  // Filling arr with objects and saving listItems to output
+  for(let x=0 ; x<blocksCount ; x++){
+    if(x == special)
+      arr.push({ id: x, color: shadesToUse[0] });
 
-    if(score == blocksIncrease && powerBy < 6){
-        blocksIncrease += 5;
-        powerBy++ && difInc++;
-        difficulty = multipliColorBy[difInc];
-       }
+    else
+      arr.push({ id: x, color: shadesToUse[1] });
 
-    // Generate a new shade each time the correct shade is clicked
-    newShade();
-
-    let arr = [];
-    let output = '';
-
-    // Generating special var each round (after clicking listItem / after reloading page)
-    special = Math.floor(Math.random() * blocksCount);
-
-    // Filling arr with objects and saving listItems to output
-    for(let x=0 ; x<blocksCount ; x++){
-      if(x == special)
-        arr.push({ id: x, color: shadesToUse[0] });
-
-      else
-        arr.push({ id: x, color: shadesToUse[1] });
-
-      output += `<li><div class="block" onclick=decide(this.id) id="${x}"></div></li>`;
-    }
-
-    // Change width of a block depending on blocksCount
-    switch(blocksCount){
-      case 4: defDimen = '150px'; break;
-      case 9: defDimen = '100px'; break;
-      case 16: defDimen = '80px';  break;
-      case 25: defDimen = '70px'; break;
-      case 36: defDimen = '60px'; break;
-    }
-
-    // Output actual blocks
-    HTMLtarget.innerHTML = output;
-
-    // Change width of all blocks displayed depending on switch results above
-    for(let idNum=0 ; idNum<arr.length ; idNum++){
-      document.getElementById(idNum).style.width = defDimen;
-      document.getElementById(idNum).style.height = defDimen;
-    }
-
-    // Finally, giving background colors to divs
-    for(let y=0 ; y<arr.length ; y++)
-      document.getElementById(arr[y].id).style.backgroundColor = arr[y].color;
+    output += `<li><div class="block" onclick=decide(this.id) id="${x}"></div></li>`;
   }
+
+  // Change width of a block depending on blocksCount
+  switch(blocksCount){
+    case 4: defDimen = '150px'; break;
+    case 9: defDimen = '100px'; break;
+    case 16: defDimen = '80px';  break;
+    case 25: defDimen = '70px'; break;
+    case 36: defDimen = '60px'; break;
+  }
+
+  // Output actual blocks
+  HTMLtarget.innerHTML = output;
+
+  // Change width of all blocks displayed depending on switch results above
+  for(let idNum=0 ; idNum<arr.length ; idNum++){
+    document.getElementById(idNum).style.width = defDimen;
+    document.getElementById(idNum).style.height = defDimen;
+  }
+
+  // Finally, giving background colors to divs
+  for(let y=0 ; y<arr.length ; y++)
+    document.getElementById(arr[y].id).style.backgroundColor = arr[y].color;
+}
