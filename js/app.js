@@ -62,6 +62,10 @@ function init(){
   // To store gaming data in local storage
   historyData = {};
 
+  playScore = new Audio('/audio/score.mp3');
+  playFault = new Audio('/audio/fault.mp3');
+  playTimer = new Audio('/audio/timer.mp3');
+
   /**
    * 30 static colors to be generated.
    * Only rgb is being used, names are for my referrence.
@@ -304,6 +308,8 @@ newInt = setInterval(() => {
   if(newTime < 7){
     HTMLtime.style.border = '2px dotted #e74c3c';
     HTMLtime.style.color = '#e74c3c';
+    if(newTime > 0)
+      playTimer.play();
   }
   
   if(newTime < 1){
@@ -324,6 +330,7 @@ newInt = setInterval(() => {
 // Decide whether clicked on special or not
 function decide(id){
   if(id == special){
+    playScore.play();
     score++;
 
   // Increasing width of progress bar
@@ -336,7 +343,7 @@ function decide(id){
   setTimeout(function(){
     HTMLscorePlus.style.opacity = '0';
     HTMLscorePlus.style.transform = 'translate(-15px)';
-  }, 400);
+  }, 375);
 
   if (score == topScore){
     HTMLscore.innerHTML = `<h4>Score: <span class="score-fault-output">${score}</span>/25</h4>`;
@@ -362,6 +369,7 @@ function decide(id){
 }
 
 else {
+  playFault.play();
   fault++;
   clearInterval(newInt);
   
@@ -371,7 +379,7 @@ else {
   setTimeout(function(){
     HTMLfaultPlus.style.opacity = '0';
     HTMLfaultPlus.style.transform = 'translate(-15px)';
-  }, 400);
+  }, 350);
 
   if (fault == 5){
     HTMLscore.innerHTML = `<h4>Score: <span class="score-fault-output">${score}</span>/25</h4>`;
