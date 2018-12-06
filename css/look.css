@@ -56,6 +56,7 @@ a:active {
 ul#target {
     width: 400px;  /* Must be here! */
     list-style: none;
+    display: none;
 }
 
 ul#target li {
@@ -94,7 +95,7 @@ ul#target li div {
     padding:8px 26px;
     margin:10px auto;
 	text-decoration:none;
-    display: block;
+    display: none;
 }
 
 #start-button:hover {
@@ -344,7 +345,7 @@ tr:nth-of-type(2){
 
 #ok, #ie {
     max-width: 100%;
-    margin: 100px auto;
+    margin: 100px 50px;
     text-align: center;
     display: none;
 }

@@ -118,6 +118,9 @@ function loadGame(){
 }
 
 function init(){
+  HTMLstartButton.style.display = 'block';
+  HTMLtarget.style.display = 'none';
+
   // Check for web browser
   let b = navigator.userAgent;
   let isIE = b.indexOf('MSIE ') > -1 || b.indexOf('Trident/') > -1;
@@ -140,12 +143,16 @@ function init(){
     if(historyData === null)
       localStorage.setItem('history', '[]');
 
-    if(historyData == '[]')
+    if(historyData == '[]'){
       HTMLnoHistory.style.display = 'block';
+      HTMLhistory.style.display = 'block';
+      HTMLhistory.style.visibility = 'hidden';
+    }
 
     else {
       HTMLnoHistory.style.display = 'none';
       HTMLclearHistory.style.display = 'block';
+      HTMLhistory.style.visibility = 'visible';
 
       // Fetch & print current history data
       let tempStoreHistory = JSON.parse(historyData);
@@ -262,6 +269,8 @@ function showHistory(data){
   // Show quote
   let output = Math.floor(Math.random() * 7);
   HTMLquotes.innerHTML = `<p>${quotes[output].text}</p><p>&mdash; ${quotes[output].by}</p>`;
+
+  HTMLhistory.style.visibility = 'visible';
 }
 
 //  Return difficulty in text
@@ -433,21 +442,23 @@ function start(){
 
   HTMLscore.innerHTML = `<h4>Score: <span class="score-fault-output">${score}</span>/25</h4>`;
   HTMLfault.innerHTML = `<h4>Fault: <span class="score-fault-output">${fault}</span>/5</h4>`;
-  HTMLdifficulty.innerHTML = showDifficulty();
 
   // Start timer
-  countDown();
+  countDown();    
+
+  if(score > blocksIncrease){
+    blocksIncrease += 5;
+    powerBy++;
+    difInc++;
+    difficulty = multipliColorBy[difInc];   // only to print difficulity
+  }
 
   // Get amount of blocks depending on powerBy
   let blocksCount = Math.pow(powerBy, 2);
-
-  if(score > blocksIncrease && powerBy < 6){
-    blocksIncrease += 5;
-    powerBy++ && difInc++;
-    difficulty = multipliColorBy[difInc];
-  }
-
   
+  // Print current difficulty
+  HTMLdifficulty.innerHTML = showDifficulty();
+
   if(difInc > 0)
     HTMLranks[difInc-1].style.color = '#e74c3c';
 
