@@ -1,2 +1,2 @@
-# blocks
-Give your eyes a test.
+![Blocks](/img/logo.png)
+###Give your eyes a test.
