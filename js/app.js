@@ -357,6 +357,12 @@ newInt = setInterval(() => {
 
 // Decide whether clicked on special or not
 function decide(id){
+  // STOP any currently active audio
+  playScore.pause();
+  playFault.pause();
+  playScore.currentTime = 0.0;
+  playFault.currentTime = 0.0;
+
   if(id == special){
     playScore.play();
     score++;
