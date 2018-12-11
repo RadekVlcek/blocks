@@ -46,7 +46,7 @@ function loadGame(){
   // How much to add to trans variable (for transparecny)
   multipliColorBy = [0.15, 0.085, 0.06, 0.05, 0.04];
 
-  // Initial - Incrementing difficulty in init() function
+  // Initial - Incrementing difficulty in startGame() function
   difInc = 0;
 
   // Initial - Difficulty is depending on the value of multipliColorBy
@@ -191,7 +191,7 @@ HTMLstartButton.addEventListener('click', function(){
     HTMLranks[x].style.color = '#000000';
   
   loadGame();
-  start();
+  startGame();
 });
 
 // On click Clear History button
@@ -237,7 +237,7 @@ function showHistory(data){
   
   // If 5 records already exist, remove the last one
   if(tempStoreHistory.length > 5)
-  tempStoreHistory.pop();
+    tempStoreHistory.pop();
   
   localStorage.setItem('history', JSON.stringify(tempStoreHistory));
   
@@ -398,7 +398,7 @@ function decide(id){
     clearInterval(newInt);
     if(newTime == 14) newTime += 1;
     if(newTime < 14) newTime += 2;
-    start();
+    startGame();
   }
 }
 
@@ -440,7 +440,7 @@ else {
   HTMLfault.innerHTML = `<h4>Fault: <span class="score-fault-output">${fault}</span>/5</h4>`;
 }
 
-function start(){
+function startGame(){
   if(newTime > 5){
     HTMLtime.style.border = '2px solid #26a65b';
     HTMLtime.style.color = '#26a65b';
@@ -456,7 +456,7 @@ function start(){
     blocksIncrease += 5;
     powerBy++;
     difInc++;
-    difficulty = multipliColorBy[difInc];   // only to print difficulity
+    difficulty = multipliColorBy[difInc];
   }
 
   // Get amount of blocks depending on powerBy
@@ -474,7 +474,7 @@ function start(){
   let arr = [];
   let output = '';
 
-  // Generating special var each round (after clicking listItem / after reloading page)
+  // Generating special var each round
   special = Math.floor(Math.random() * blocksCount);
 
   // Filling arr with objects and saving listItems to output

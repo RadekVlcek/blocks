@@ -328,10 +328,9 @@ ul#ranks-wrapper li p {
 
 #github-link {
     opacity: 0.8;
-    /* width: 10px; */
     position: relative;
-    right: 29px;
-    top: 15px;
+    left: 2px;
+    top: 3.5px;
     transition: opacity .1s;
 }
 
