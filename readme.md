@@ -1,2 +1,2 @@
 ![Blocks](/img/logo.png)
-### Give your eyes a test.
+#### Game to test how good your sight is.
