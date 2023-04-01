@@ -59,9 +59,9 @@ function loadGame(){
   historyData = {};
 
   // Instances for audio files
-  playScore = new Audio('/audio/score.mp3');
-  playFault = new Audio('/audio/fault.mp3');
-  playTimer = new Audio('/audio/timer.mp3');
+  playScore = new Audio('audio/score.mp3');
+  playFault = new Audio('audio/fault.mp3');
+  playTimer = new Audio('audio/timer.mp3');
 
   // Hide "no history available" message
   if(HTMLnoHistory.style.display == 'block')
